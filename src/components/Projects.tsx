@@ -1,0 +1,305 @@
+"use client"
+
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion"
+import { useRef, useState } from "react"
+import { AnimatedSection, StaggerContainer, staggerItem } from "./AnimatedSection"
+import { projects } from "@/lib/data"
+
+const STATUS_CONFIG = {
+  live:   { label: "Live",    color: "rgba(52,211,153,1)",  bg: "rgba(52,211,153,0.10)",  dot: true  },
+  active: { label: "Active",  color: "rgba(108,92,231,1)",  bg: "rgba(108,92,231,0.12)",  dot: true  },
+  lab:    { label: "Lab",     color: "rgba(251,191,36,1)",  bg: "rgba(251,191,36,0.10)",  dot: false },
+  wip:    { label: "In Progress", color: "rgba(96,165,250,1)", bg: "rgba(96,165,250,0.10)", dot: true },
+} as const
+
+type ProjectStatus = keyof typeof STATUS_CONFIG
+
+function ProjectCard({ project, index }: { project: (typeof projects)[0] & { status?: ProjectStatus; impact?: string; link?: string }, index: number }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const [hovered, setHovered] = useState(false)
+
+  const mouseX = useMotionValue(0)
+  const mouseY = useMotionValue(0)
+  const sx = useSpring(mouseX, { stiffness: 180, damping: 18 })
+  const sy = useSpring(mouseY, { stiffness: 180, damping: 18 })
+
+  function onMouseMove(e: React.MouseEvent<HTMLDivElement>) {
+    const rect = ref.current?.getBoundingClientRect()
+    if (!rect) return
+    mouseX.set(e.clientX - rect.left)
+    mouseY.set(e.clientY - rect.top)
+  }
+
+  const statusKey = ((project as any).status ?? "lab") as ProjectStatus
+  const cfg = STATUS_CONFIG[statusKey]
+  const isWip = statusKey === "wip"
+  const link = (project as any).link as string | undefined
+  const impact = (project as any).impact as string | undefined
+
+  return (
+    <motion.div
+      ref={ref}
+      variants={staggerItem}
+      onMouseMove={onMouseMove}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      whileHover={{ y: -8 }}
+      transition={{ type: "spring", stiffness: 280, damping: 22 }}
+      className={`group relative border rounded-xl overflow-hidden flex flex-col transition-all duration-500 ${
+        isWip
+          ? "bg-[var(--bg-surface)]/50 border-dashed border-[var(--border-subtle)]"
+          : "bg-[var(--bg-surface)] border-[var(--border-subtle)] hover:border-[var(--border-strong)]"
+      }`}
+      style={{
+        boxShadow: hovered && !isWip
+          ? "0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(108,92,231,0.12)"
+          : "0 2px 8px rgba(0,0,0,0.12)",
+        transition: "box-shadow 0.4s ease, transform 0.3s ease",
+      }}
+    >
+      {/* Mouse-tracked glow */}
+      {!isWip && (
+        <motion.div
+          className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"
+          style={{
+            background: hovered
+              ? `radial-gradient(220px circle at ${sx.get()}px ${sy.get()}px, rgba(108,92,231,0.07), transparent 70%)`
+              : "none",
+          }}
+        />
+      )}
+
+      {/* Top accent line */}
+      <div
+        className="absolute top-0 left-0 right-0 h-[2px] scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"
+        style={{ background: `linear-gradient(to right, ${cfg.color}, transparent)` }}
+      />
+
+      {/* WIP diagonal watermark */}
+      {isWip && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden">
+          <span
+            className="font-[family-name:var(--font-mono)] text-[11px] tracking-[0.35em] uppercase rotate-[-35deg] opacity-[0.04] text-[var(--text-primary)] whitespace-nowrap text-[80px] font-black"
+          >
+            soon
+          </span>
+        </div>
+      )}
+
+      <div className="relative z-10 p-7 flex flex-col h-full">
+        {/* Header */}
+        <div className="flex items-start justify-between mb-5">
+          {/* Big number */}
+          <div
+            className="font-[family-name:var(--font-mono)] text-[52px] font-extrabold leading-none tracking-[-3px] transition-colors duration-300 select-none"
+            style={{ color: hovered && !isWip ? cfg.color.replace("1)", "0.18)") : "var(--border-subtle)" }}
+          >
+            {project.num}
+          </div>
+
+          {/* Status badge */}
+          <div className="flex flex-col items-end gap-1.5 mt-1">
+            <span
+              className="inline-flex items-center gap-1.5 font-[family-name:var(--font-mono)] text-[9px] px-2 py-[3px] rounded-[3px] tracking-[0.14em] uppercase font-medium"
+              style={{ color: cfg.color, background: cfg.bg }}
+            >
+              {cfg.dot && (
+                <span className="relative flex h-1.5 w-1.5">
+                  {statusKey !== "lab" && (
+                    <span
+                      className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-60"
+                      style={{ background: cfg.color }}
+                    />
+                  )}
+                  <span className="relative inline-flex rounded-full h-1.5 w-1.5" style={{ background: cfg.color }} />
+                </span>
+              )}
+              {cfg.label}
+            </span>
+          </div>
+        </div>
+
+        {/* Title */}
+        <h3 className="text-[16px] font-bold tracking-[-0.2px] mb-2 text-[var(--text-primary)] group-hover:text-white transition-colors duration-200 leading-snug">
+          {project.title}
+        </h3>
+
+        {/* Animated divider */}
+        <div
+          className="h-px mb-4 transition-all duration-500"
+          style={{
+            background: hovered
+              ? `linear-gradient(to right, ${cfg.color.replace("1)", "0.4)")}, transparent)`
+              : "var(--border-subtle)",
+            width: hovered ? "60%" : "24px",
+          }}
+        />
+
+        {/* Description */}
+        <p className="text-[12.5px] text-[var(--text-secondary)] leading-[1.85] mb-5 flex-1">
+          {project.desc}
+        </p>
+
+        {/* Impact callout */}
+        {impact && !isWip && (
+          <div
+            className="flex items-start gap-2 rounded-lg px-3 py-2.5 mb-5 border"
+            style={{
+              background: cfg.bg,
+              borderColor: cfg.color.replace("1)", "0.2)"),
+            }}
+          >
+            <span className="text-[10px] mt-[1px] shrink-0" style={{ color: cfg.color }}>▶</span>
+            <p className="font-[family-name:var(--font-mono)] text-[10px] leading-[1.7]" style={{ color: cfg.color }}>
+              {impact}
+            </p>
+          </div>
+        )}
+
+        {/* WIP placeholder */}
+        {isWip && (
+          <div className="flex items-center gap-2 rounded-lg px-3 py-2.5 mb-5 border border-dashed border-[var(--border-subtle)] bg-[var(--bg-elevated)]/40">
+            <span className="font-[family-name:var(--font-mono)] text-[10px] text-[var(--text-tertiary)] leading-[1.7]">
+              🔧 under active development — details coming soon.
+            </span>
+          </div>
+        )}
+
+        {/* Stack tags */}
+        <div className="flex flex-wrap gap-1.5 mb-5">
+          {project.stack.map((tag) => (
+            <span
+              key={tag}
+              className="font-[family-name:var(--font-mono)] text-[9px] px-2 py-[4px] rounded-[3px] border border-[var(--border-subtle)] text-[var(--text-tertiary)] bg-[var(--bg-elevated)] group-hover:border-[var(--border-default)] group-hover:text-[var(--text-secondary)] transition-all duration-200"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+
+        {/* Footer: link or locked */}
+        <div className="flex items-center justify-between pt-4 border-t border-[var(--border-subtle)]">
+          <span className="font-[family-name:var(--font-mono)] text-[9px] text-[var(--text-tertiary)] tracking-[0.12em] uppercase">
+            {isWip ? "in development" : `project ${project.num}`}
+          </span>
+          {link && !isWip ? (
+            <a
+              href={link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-[family-name:var(--font-mono)] text-[10px] tracking-[0.1em] transition-colors duration-200 hover:underline underline-offset-2"
+              style={{ color: cfg.color }}
+            >
+              view ↗
+            </a>
+          ) : isWip ? (
+            <span className="font-[family-name:var(--font-mono)] text-[9px] text-[var(--text-tertiary)] opacity-50 tracking-[0.1em]">
+              🔒 locked
+            </span>
+          ) : (
+            <span className="font-[family-name:var(--font-mono)] text-[9px] text-[var(--text-tertiary)] opacity-40 tracking-[0.1em]">
+              private repo
+            </span>
+          )}
+        </div>
+      </div>
+    </motion.div>
+  )
+}
+
+export function Projects() {
+  const liveProjects = projects.filter(p => (p as any).status !== "wip")
+  const wipProjects  = projects.filter(p => (p as any).status === "wip")
+
+  return (
+    <section id="projects" className="py-[120px] px-6 md:px-12 bg-[var(--bg-base)] relative overflow-hidden">
+      {/* Background bloom */}
+      <div className="absolute bottom-0 right-0 w-[500px] h-[400px] bg-[radial-gradient(ellipse,rgba(108,92,231,0.05),transparent_70%)] pointer-events-none" />
+
+      <AnimatedSection>
+        <p className="font-[family-name:var(--font-mono)] text-[11px] text-[var(--accent-light)] tracking-[0.25em] lowercase mb-5 flex items-center gap-3">
+          <span className="text-[var(--text-tertiary)]">//</span> projects
+          <span className="text-[var(--text-tertiary)]/40">— {projects.length} total · {wipProjects.length} in progress</span>
+        </p>
+      </AnimatedSection>
+
+      <AnimatedSection delay={0.1}>
+        <div className="flex items-end justify-between mb-4 flex-wrap gap-6">
+          <h2 className="text-[clamp(36px,5vw,56px)] font-extrabold tracking-[-2px] leading-[1.05]">
+            What I&apos;ve Built
+          </h2>
+          <p className="font-[family-name:var(--font-mono)] text-[11px] text-[var(--text-tertiary)] tracking-[0.1em] max-w-[260px] leading-[1.8] text-right hidden md:block">
+            real infra, real tooling — built to understand systems by breaking and rebuilding them.
+          </p>
+        </div>
+      </AnimatedSection>
+
+      {/* Status legend */}
+      <AnimatedSection delay={0.15}>
+        <div className="flex flex-wrap gap-4 mb-14">
+          {Object.entries(STATUS_CONFIG).map(([key, val]) => (
+            <div key={key} className="flex items-center gap-1.5">
+              <span
+                className="w-2 h-2 rounded-full"
+                style={{ background: val.color, boxShadow: `0 0 5px ${val.color}` }}
+              />
+              <span className="font-[family-name:var(--font-mono)] text-[10px] text-[var(--text-tertiary)] tracking-[0.12em]">
+                {val.label}
+              </span>
+            </div>
+          ))}
+        </div>
+      </AnimatedSection>
+
+      {/* Live projects grid */}
+      <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-5">
+        {liveProjects.map((project, i) => (
+          <ProjectCard key={project.num} project={project as any} index={i} />
+        ))}
+      </StaggerContainer>
+
+      {/* WIP projects — dashed row */}
+      {wipProjects.length > 0 && (
+        <>
+          <AnimatedSection delay={0.1}>
+            <div className="flex items-center gap-3 my-8">
+              <div className="h-px flex-1 border-t border-dashed border-[var(--border-subtle)]" />
+              <span className="font-[family-name:var(--font-mono)] text-[10px] text-[var(--text-tertiary)] tracking-[0.18em] uppercase">
+                in the lab
+              </span>
+              <div className="h-px flex-1 border-t border-dashed border-[var(--border-subtle)]" />
+            </div>
+          </AnimatedSection>
+          <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {wipProjects.map((project, i) => (
+              <ProjectCard key={project.num} project={project as any} index={i} />
+            ))}
+          </StaggerContainer>
+        </>
+      )}
+
+      {/* Bottom CTA */}
+      <AnimatedSection delay={0.2}>
+        <div className="mt-16 flex items-center justify-between flex-wrap gap-4">
+          <p className="font-[family-name:var(--font-mono)] text-[11px] text-[var(--text-tertiary)] tracking-[0.12em]">
+            more coming as I build in public —
+            <a
+              href="https://github.com/0xvince"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[var(--accent-light)] hover:underline underline-offset-2 ml-1"
+            >
+              follow along on GitHub ↗
+            </a>
+          </p>
+          <div className="flex items-center gap-2">
+            <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="font-[family-name:var(--font-mono)] text-[10px] text-[var(--text-tertiary)] tracking-[0.12em]">
+              actively building
+            </span>
+          </div>
+        </div>
+      </AnimatedSection>
+    </section>
+  )
+}
