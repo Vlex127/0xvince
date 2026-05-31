@@ -20,27 +20,35 @@ const OG_IMAGE = `${SITE_URL}/og.png`;
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "0xVince — Cybersecurity Researcher",
+    default: "Vincent Iwuno (0xVince) — Cybersecurity Researcher",
     template: "%s | 0xVince",
   },
   description:
-    "Cybersecurity researcher based in Lagos, Nigeria. Specializing in penetration testing, network security, and CTF challenges.",
+    "17-year-old cybersecurity researcher from Nigeria specialising in penetration testing, offensive security, CTF challenges, and security tooling. Open to internships and entry-level security roles.",
   keywords: [
     "cybersecurity",
     "penetration testing",
     "ethical hacker",
-    "CTF",
+    "CTF player",
     "security researcher",
     "0xvince",
     "Vincent Iwuno",
-    "Lagos Nigeria",
     "bug bounty",
     "web security",
     "network security",
+    "offensive security",
+    "kali linux",
+    "tryhackme",
+    "hackthebox",
+    "nigeria cybersecurity",
+    "young hacker",
   ],
   authors: [{ name: "Vincent Iwuno", url: SITE_URL }],
   creator: "Vincent Iwuno",
   publisher: "Vincent Iwuno",
+  category: "technology",
+  classification: "Cybersecurity / Portfolio",
+
   robots: {
     index: true,
     follow: true,
@@ -52,45 +60,51 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
+
   openGraph: {
     type: "website",
     locale: "en_US",
     url: SITE_URL,
-    siteName: "0xVince",
-    title: "0xVince — Cybersecurity Researcher",
+    siteName: "Vincent Iwuno — 0xVince",
+    title: "Vincent Iwuno (0xVince) — Cybersecurity Researcher",
     description:
-      "Cybersecurity researcher based in Lagos, Nigeria. Specializing in penetration testing, network security, and CTF challenges.",
+      "17-year-old offensive security researcher from Nigeria. Penetration testing, CTF player, and security tooling — open to internships and entry-level roles.",
     images: [
       {
         url: OG_IMAGE,
         width: 1200,
         height: 630,
-        alt: "0xVince — Cybersecurity Researcher",
+        alt: "Vincent Iwuno — 0xVince · Cybersecurity Researcher",
         type: "image/png",
       },
     ],
   },
+
   twitter: {
     card: "summary_large_image",
-    title: "0xVince — Cybersecurity Researcher",
+    site: "@0xvince1",
+    creator: "@0xvince1",
+    title: "Vincent Iwuno (0xVince) — Cybersecurity Researcher",
     description:
-      "Cybersecurity researcher based in Lagos, Nigeria. Specializing in penetration testing, network security, and CTF challenges.",
+      "17-year-old offensive security researcher from Nigeria. Penetration testing, CTF player, security tooling.",
     images: [OG_IMAGE],
-    creator: "@0xvince",
   },
+
   icons: {
-    icon: "/favicon.ico",
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon.png", type: "image/png", sizes: "32x32" },
+    ],
+    apple: [
+      { url: "/apple-icon.png", sizes: "180x180", type: "image/png" },
+    ],
     shortcut: "/favicon.ico",
   },
+
+  manifest: "/manifest.json",
+
   alternates: {
     canonical: SITE_URL,
-  },
-  other: {
-    "theme-color": "#050507",
-    "color-scheme": "dark",
-    "apple-mobile-web-app-capable": "yes",
-    "apple-mobile-web-app-status-bar-style": "black-translucent",
-    "msapplication-TileColor": "#050507",
   },
 };
 
@@ -108,29 +122,42 @@ const jsonLd = {
   name: "Vincent Iwuno",
   alternateName: "0xVince",
   url: SITE_URL,
+  image: OG_IMAGE,
   jobTitle: "Cybersecurity Researcher",
   description:
-    "Cybersecurity researcher based in Lagos, Nigeria. Specializing in penetration testing, network security, and CTF challenges.",
+    "17-year-old cybersecurity researcher from Nigeria specialising in penetration testing, offensive security, and CTF challenges.",
   address: {
     "@type": "PostalAddress",
-    addressLocality: "Lagos",
     addressCountry: "NG",
   },
+  email: "0xvince@vincentiwuno.me",
   sameAs: [
     "https://github.com/Vlex127",
-    "https://X.com/0xvince1",
+    "https://x.com/0xvince1",
     "https://linkedin.com/in/vincentiwuno",
     "https://instagram.com/0xvince",
+    "https://tryhackme.com/p/0xvince",
   ],
   knowsAbout: [
     "Penetration Testing",
     "Network Security",
-    "Web Security",
-    "CTF",
+    "Web Application Security",
+    "CTF Challenges",
     "OSINT",
-    "Python",
+    "Python Scripting",
     "Kali Linux",
+    "Offensive Security",
+    "Social Engineering",
+    "SMTP / Email Security",
   ],
+  hasOccupation: {
+    "@type": "Occupation",
+    name: "Cybersecurity Researcher",
+    occupationLocation: {
+      "@type": "Country",
+      name: "Nigeria",
+    },
+  },
 };
 
 export default function RootLayout({

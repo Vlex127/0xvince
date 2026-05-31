@@ -119,7 +119,7 @@ export function Hero() {
             <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400" />
           </span>
           <span className="font-[family-name:var(--font-mono)] text-[10px] text-[var(--text-secondary)] tracking-[0.18em] lowercase">
-            available for work · lagos, nigeria
+            available for work · remote
           </span>
         </motion.div>
 

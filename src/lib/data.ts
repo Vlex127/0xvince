@@ -62,7 +62,7 @@ export const experience = [
   {
     date: "2026 — present",
     title: "Independent Security Researcher",
-    org: "Self-employed · Lagos, Nigeria",
+    org: "Self-employed",
     type: "research",
     status: "current",
     desc: "Independently researching offensive security techniques and building real-world infrastructure to test attack and defence scenarios. Focus areas include email security, phishing simulation, and network-layer exploitation.",

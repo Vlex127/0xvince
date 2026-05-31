@@ -1,0 +1,13 @@
+{
+  "name": "Vincent Iwuno — 0xVince",
+  "short_name": "0xVince",
+  "description": "Cybersecurity researcher · Penetration tester · CTF player",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#050507",
+  "theme_color": "#050507",
+  "icons": [
+    { "src": "/icon.png", "sizes": "32x32", "type": "image/png" },
+    { "src": "/apple-icon.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}

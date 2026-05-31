@@ -9,8 +9,8 @@ export function Footer() {
         © 2026 <span className="text-[var(--accent-light)]">Vincent Iwuno</span> · 0xvince@vincentiwuno.me
       </p>
       <p className="font-[family-name:var(--font-mono)] text-[11px] text-[var(--text-tertiary)] tracking-[0.05em]">
-        built with <span className="text-[var(--accent-light)]">♥</span> in{" "}
-        <span className="text-[var(--accent-light)]">Lagos, Nigeria</span>
+        built with <span className="text-[var(--accent-light)]">♥</span> by{" "}
+        <span className="text-[var(--accent-light)]">0xVince</span>
       </p>
     </footer>
   )

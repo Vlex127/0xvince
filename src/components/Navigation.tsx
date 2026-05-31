@@ -45,6 +45,15 @@ export function Navigation() {
           ))}
         </ul>
 
+        {/* CV download button — desktop */}
+        <a
+          href="/cv.pdf"
+          download
+          className="hidden md:inline-flex items-center gap-2 font-[family-name:var(--font-mono)] text-[11px] text-[var(--accent-light)] tracking-[0.08em] lowercase px-4 py-2 border border-[var(--accent-light)]/30 rounded-md hover:bg-[var(--accent)]/10 hover:border-[var(--accent-light)]/50 transition-all duration-300 no-underline"
+        >
+          cv ↓
+        </a>
+
         {/* Mobile menu button */}
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
@@ -90,6 +99,18 @@ export function Navigation() {
                 {link.label}
               </motion.a>
             ))}
+            <motion.a
+              href="/cv.pdf"
+              download
+              onClick={() => setMobileOpen(false)}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 10 }}
+              transition={{ delay: navLinks.length * 0.05, duration: 0.3 }}
+              className="font-[family-name:var(--font-mono)] text-lg text-[var(--accent-light)] no-underline tracking-[0.1em] lowercase border border-[var(--accent-light)]/30 px-6 py-2 rounded-md hover:bg-[var(--accent)]/10 transition-colors"
+            >
+              cv ↓
+            </motion.a>
           </motion.div>
         )}
       </AnimatePresence>

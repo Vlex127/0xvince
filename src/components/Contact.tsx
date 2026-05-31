@@ -93,7 +93,7 @@ export function Contact() {
                   available for work
                 </p>
                 <p className="font-[family-name:var(--font-mono)] text-[11px] text-[var(--text-tertiary)] leading-[1.7]">
-                  open to security roles, freelance pentesting, CTF teams &amp; internships · Lagos, Nigeria (remote ok)
+                  open to security roles, freelance pentesting, CTF teams &amp; internships · remote
                 </p>
               </div>
             </div>

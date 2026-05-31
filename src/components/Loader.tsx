@@ -294,7 +294,7 @@ export function Loader() {
             </span>
             <div className="flex items-center gap-4">
               <span className="font-[family-name:var(--font-mono)] text-[9px] text-[var(--text-tertiary)] tracking-[0.1em]">
-                kali linux · lagos ng
+                kali linux · remote
               </span>
               <span className="relative flex h-1.5 w-1.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60" />
