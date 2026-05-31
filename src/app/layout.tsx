@@ -117,8 +117,8 @@ const jsonLd = {
     addressCountry: "NG",
   },
   sameAs: [
-    "https://github.com/0xvince",
-    "https://twitter.com/0xvince",
+    "https://github.com/Vlex127",
+    "https://X.com/0xvince1",
     "https://linkedin.com/in/vincentiwuno",
     "https://instagram.com/0xvince",
   ],

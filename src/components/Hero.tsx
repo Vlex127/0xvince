@@ -200,7 +200,7 @@ export function Hero() {
             get in touch
           </MagneticButton>
           <a
-            href="https://github.com/0xVince"
+            href="https://github.com/Vlex127"
             target="_blank"
             rel="noopener noreferrer"
             className="font-[family-name:var(--font-mono)] text-[10px] text-[var(--text-tertiary)] tracking-[0.15em] hover:text-[var(--accent-light)] transition-colors duration-200 lowercase ml-1"

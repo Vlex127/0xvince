@@ -40,7 +40,7 @@ function AvatarCard() {
     {/* Card */}
     <div className="relative w-[300px] h-[380px] rounded-2xl overflow-hidden border border-[var(--border-default)] group-hover:border-[var(--border-strong)] transition-colors duration-500">
       <Image
-        src="/profile2.jpeg"
+        src="/profile.png"
         alt="Vincent Iwuno — 0xVince"
         fill
         sizes="(max-width: 768px) 300px, 300px"

@@ -284,7 +284,7 @@ export function Projects() {
           <p className="font-[family-name:var(--font-mono)] text-[11px] text-[var(--text-tertiary)] tracking-[0.12em]">
             more coming as I build in public —
             <a
-              href="https://github.com/0xvince"
+              href="https://github.com/Vlex127"
               target="_blank"
               rel="noopener noreferrer"
               className="text-[var(--accent-light)] hover:underline underline-offset-2 ml-1"

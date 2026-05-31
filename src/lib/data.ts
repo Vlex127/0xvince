@@ -1,5 +1,8 @@
 // lib/data.ts
 
+import { FaGithub, FaLinkedin, FaInstagram, FaXTwitter, FaEnvelope } from "react-icons/fa6"
+import { SiTryhackme, SiHackthebox } from "react-icons/si"
+
 export const navLinks = [
   { label: "about", href: "#about" },
   { label: "skills", href: "#skills" },
@@ -132,7 +135,7 @@ export const projects = [
     impact: "Reduced manual recon documentation time significantly — scan-to-report in one command.",
     stack: ["Python", "Nmap", "Bash", "SMTP", "XML parsing"],
     status: "active",
-    link: "https://github.com/0xvince",
+    link: "https://github.com/Vlex127",
   },
   {
     num: "04",
@@ -219,16 +222,18 @@ export const socialLinks = [
   { label: "TryHackMe", href: "https://tryhackme.com/p/0xvince" },
   { label: "HackTheBox", href: "https://hackthebox.com/" },
   { label: "LinkedIn", href: "https://linkedin.com/in/vincentiwuno" },
-  { label: "Twitter/X", href: "https://twitter.com/0xvince" },
+  { label: "X", href: "https://X.com/0xvince1" },
 ]
 
 // ─────────────────────────────────────────
 // CONTACT LINKS
 // ─────────────────────────────────────────
 export const contactLinks = [
-  { id: "email",     icon: "✉️", label: "0xvince@vincentiwuno.me",      href: "mailto:0xvince@vincentiwuno.me" },
-  { id: "github",    icon: "⚙️", label: "github.com/0xvince",           href: "https://github.com/0xvince" },
-  { id: "twitter",   icon: "✦",  label: "@0xvince",                     href: "https://twitter.com/0xvince" },
-  { id: "linkedin",  icon: "⊞",  label: "linkedin.com/in/vincentiwuno", href: "https://linkedin.com/in/vincentiwuno" },
-  { id: "tryhackme", icon: "🏴", label: "tryhackme.com/p/0xvince",      href: "https://tryhackme.com/p/0xvince" },
+  { id: "email",     icon: FaEnvelope,   label: "0xvince@vincentiwuno.me",      href: "mailto:0xvince@vincentiwuno.me" },
+  { id: "github",    icon: FaGithub,     label: "github.com/Vlex127",           href: "https://github.com/Vlex127" },
+  { id: "twitter",   icon: FaXTwitter,   label: "@0xvince",                     href: "https://X.com/0xvince1" },
+  { id: "linkedin",  icon: FaLinkedin,   label: "linkedin.com/in/vincentiwuno", href: "https://linkedin.com/in/vincentiwuno" },
+  { id: "tryhackme", icon: SiTryhackme,  label: "tryhackme.com/p/0xvince",      href: "https://tryhackme.com/p/0xvince" },
+  { id: "hackthebox",icon: SiHackthebox, label: "hackthebox.com",               href: "https://hackthebox.com/" },
+  { id: "instagram", icon: FaInstagram,  label: "@0xvince",                     href: "https://instagram.com/0xvince" },
 ]
