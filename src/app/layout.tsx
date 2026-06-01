@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     template: "%s | 0xVince",
   },
   description:
-    "17-year-old cybersecurity researcher from Nigeria specialising in penetration testing, offensive security, CTF challenges, and security tooling. Open to internships and entry-level security roles.",
+    "18-year-old cybersecurity researcher from Nigeria specialising in penetration testing, offensive security, CTF challenges, and security tooling. Open to internships and entry-level security roles.",
   keywords: [
     "cybersecurity",
     "penetration testing",
@@ -68,7 +68,7 @@ export const metadata: Metadata = {
     siteName: "Vincent Iwuno — 0xVince",
     title: "Vincent Iwuno (0xVince) — Cybersecurity Researcher",
     description:
-      "17-year-old offensive security researcher from Nigeria. Penetration testing, CTF player, and security tooling — open to internships and entry-level roles.",
+      "18-year-old offensive security researcher from Nigeria. Penetration testing, CTF player, and security tooling — open to internships and entry-level roles.",
     images: [
       {
         url: OG_IMAGE,
@@ -86,7 +86,7 @@ export const metadata: Metadata = {
     creator: "@0xvince1",
     title: "Vincent Iwuno (0xVince) — Cybersecurity Researcher",
     description:
-      "17-year-old offensive security researcher from Nigeria. Penetration testing, CTF player, security tooling.",
+      "18-year-old offensive security researcher from Nigeria. Penetration testing, CTF player, security tooling.",
     images: [OG_IMAGE],
   },
 
@@ -125,7 +125,7 @@ const jsonLd = {
   image: OG_IMAGE,
   jobTitle: "Cybersecurity Researcher",
   description:
-    "17-year-old cybersecurity researcher from Nigeria specialising in penetration testing, offensive security, and CTF challenges.",
+    "18-year-old cybersecurity researcher from Nigeria specialising in penetration testing, offensive security, and CTF challenges.",
   address: {
     "@type": "PostalAddress",
     addressCountry: "NG",
