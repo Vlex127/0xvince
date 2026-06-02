@@ -52,7 +52,7 @@
 ## Local Development
 
 ```bash
-git clone https://github.com/0xvince/portfolio
+git clone https://github.com/vlex127/oxvince
 cd portfolio
 npm install
 npm run dev

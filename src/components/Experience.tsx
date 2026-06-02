@@ -271,7 +271,7 @@ export function Experience() {
           <span className="font-[family-name:var(--font-mono)] text-[11px] text-[var(--text-tertiary)] tracking-[0.15em]">
             more on{" "}
             <a
-              href="https://linkedin.com/in/yourhandle"
+              href="https://linkedin.com/in/vincentiwuno"
               target="_blank"
               rel="noopener noreferrer"
               className="text-[var(--accent-light)] hover:underline underline-offset-2 transition-colors duration-200"

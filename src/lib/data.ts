@@ -218,7 +218,7 @@ export const blogPosts = [
 // SOCIAL LINKS
 // ─────────────────────────────────────────
 export const socialLinks = [
-  { label: "GitHub", href: "https://github.com/0xvince" },
+  { label: "GitHub", href: "https://github.com/vlex127" },
   { label: "TryHackMe", href: "https://tryhackme.com/p/0xvince" },
   { label: "HackTheBox", href: "https://hackthebox.com/" },
   { label: "LinkedIn", href: "https://linkedin.com/in/vincentiwuno" },
