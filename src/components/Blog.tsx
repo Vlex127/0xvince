@@ -20,7 +20,7 @@ function BlogCard({
   index,
   featured = false,
 }: {
-  post: (typeof blogPosts)[0] & { readTime?: string }
+  post: (typeof blogPosts)[0] & { readTime?: string; slug?: string }
   index: number
   featured?: boolean
 }) {
@@ -40,8 +40,18 @@ function BlogCard({
 
   const cfg = getCategory(post.tag)
   const padded = String(index + 1).padStart(2, "0")
+  const isPublished = !!post.slug && !post.meta.includes("coming soon")
+
+  const Wrapper = isPublished ? "a" : "div"
+  const wrapperProps = isPublished
+    ? { href: `/blog/${post.slug}`, target: "_self", rel: undefined }
+    : {}
 
   return (
+    <Wrapper
+      {...wrapperProps}
+      className={`group no-underline block`}
+    >
     <motion.div
       ref={ref}
       variants={staggerItem}
@@ -50,7 +60,7 @@ function BlogCard({
       onMouseLeave={() => setHovered(false)}
       whileHover={{ y: -6 }}
       transition={{ type: "spring", stiffness: 280, damping: 22 }}
-      className={`group relative border rounded-xl overflow-hidden flex flex-col cursor-default transition-colors duration-500 ${
+      className={`relative border rounded-xl overflow-hidden flex flex-col cursor-default transition-colors duration-500 ${
         featured
           ? "bg-[var(--bg-elevated)] border-[var(--border-default)]"
           : "bg-[var(--bg-surface)] border-[var(--border-subtle)] hover:border-[var(--border-strong)]"
@@ -130,20 +140,27 @@ function BlogCard({
         {/* Footer */}
         <div className="flex items-center justify-between pt-4 border-t border-[var(--border-subtle)]">
           <div className="flex items-center gap-3">
-            {/* Coming soon pill */}
             <span className="inline-flex items-center gap-1.5 font-[family-name:var(--font-mono)] text-[9px] px-2 py-[3px] rounded-[3px] bg-[var(--bg-elevated)] border border-[var(--border-subtle)] text-[var(--text-tertiary)] tracking-[0.1em]">
-              <span className="w-1 h-1 rounded-full bg-[var(--text-tertiary)]/40" />
+              <span className={`w-1 h-1 rounded-full ${isPublished ? "bg-emerald-400" : "bg-[var(--text-tertiary)]/40"}`} />
               {post.meta}
             </span>
           </div>
-          {(post as any).readTime && (
-            <span className="font-[family-name:var(--font-mono)] text-[9px] text-[var(--text-tertiary)] tracking-[0.1em]">
-              {(post as any).readTime}
-            </span>
-          )}
+          <div className="flex items-center gap-2">
+            {(post as any).readTime && (
+              <span className="font-[family-name:var(--font-mono)] text-[9px] text-[var(--text-tertiary)] tracking-[0.1em]">
+                {(post as any).readTime}
+              </span>
+            )}
+            {isPublished && (
+              <span className="font-[family-name:var(--font-mono)] text-[9px] text-[var(--accent-light)] tracking-[0.1em] opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                read →
+              </span>
+            )}
+          </div>
         </div>
       </div>
     </motion.div>
+    </Wrapper>
   )
 }
 
@@ -159,7 +176,7 @@ export function Blog() {
       <AnimatedSection>
         <p className="font-[family-name:var(--font-mono)] text-[11px] text-[var(--accent-light)] tracking-[0.25em] lowercase mb-5 flex items-center gap-3">
           <span className="text-[var(--text-tertiary)]">//</span> blog
-          <span className="text-[var(--text-tertiary)]/40">— {blogPosts.length} posts incoming</span>
+          <span className="text-[var(--text-tertiary)]/40">— {blogPosts.length} posts · 1 published</span>
         </p>
       </AnimatedSection>
 
@@ -245,7 +262,14 @@ export function Blog() {
       <AnimatedSection delay={0.1}>
         <div className="mt-10 flex items-center justify-between flex-wrap gap-4">
           <p className="font-[family-name:var(--font-mono)] text-[11px] text-[var(--text-tertiary)] tracking-[0.1em]">
-            follow along on{" "}
+            <a
+              href="/blog"
+              className="text-[var(--accent-light)] hover:underline underline-offset-2"
+            >
+              view all posts ↗
+            </a>
+            <span className="mx-2 text-[var(--text-tertiary)]/40">·</span>
+            follow{" "}
             <a
               href="https://X.com/0xvince1"
               target="_blank"
@@ -257,11 +281,11 @@ export function Blog() {
           </p>
           <div className="flex items-center gap-2">
             <span className="relative flex h-1.5 w-1.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--accent-light)] opacity-50" />
-              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[var(--accent-light)]" />
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60" />
+              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-400" />
             </span>
             <span className="font-[family-name:var(--font-mono)] text-[10px] text-[var(--text-tertiary)] tracking-[0.12em]">
-              writing in progress
+              1 post published
             </span>
           </div>
         </div>

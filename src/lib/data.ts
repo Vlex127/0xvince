@@ -9,7 +9,7 @@ export const navLinks = [
   { label: "experience", href: "#experience" },
   { label: "projects", href: "#projects" },
   { label: "ctf", href: "#ctf" },
-  { label: "blog", href: "#blog" },
+  { label: "blog", href: "/blog" },
   { label: "contact", href: "#contact" },
 ]
 
@@ -218,13 +218,15 @@ export const ctfStats = [
 // ─────────────────────────────────────────
 export const blogPosts = [
   {
+    slug: "building-a-production-mail-server-on-kali-linux",
     tag: "smtp · infrastructure",
     title: "Building a production mail server on Kali Linux from scratch",
     desc: "A full walkthrough: Postfix setup, Brevo relay configuration, DKIM key generation, SPF/DMARC record publishing, and testing deliverability — all on a custom domain.",
-    meta: "coming soon · 2026",
+    meta: "published · 2026",
     readTime: "12 min read",
   },
   {
+    slug: "gophish-lab-simulating-phishing-campaigns",
     tag: "phishing · red team",
     title: "GoPhish lab: simulating a phishing campaign end-to-end",
     desc: "Setting up GoPhish, crafting convincing lure emails, building credential-capture landing pages, and what the data tells you about human vulnerability.",
@@ -232,6 +234,7 @@ export const blogPosts = [
     readTime: "9 min read",
   },
   {
+    slug: "spf-dkim-dmarc-what-they-actually-do",
     tag: "dns · email security",
     title: "SPF, DKIM, DMARC — what they actually do and how to break them",
     desc: "Not just definitions — a practical look at how email authentication works at the packet level, and what happens when each record is misconfigured.",
@@ -261,5 +264,5 @@ export const contactLinks = [
   { id: "linkedin",  icon: FaLinkedin,   label: "linkedin.com/in/vincentiwuno", href: "https://linkedin.com/in/vincentiwuno" },
   { id: "tryhackme", icon: SiTryhackme,  label: "tryhackme.com/p/0xvince",      href: "https://tryhackme.com/p/0xvince" },
   { id: "hackthebox",icon: SiHackthebox, label: "hackthebox.com",               href: "https://hackthebox.com/" },
-  { id: "instagram", icon: FaInstagram,  label: "@0xvince",                     href: "https://instagram.com/0xvince" },
+  { id: "instagram", icon: FaInstagram,  label: "@0xvince",                     href: "https://instagram.com/vincent_iwuno" },
 ]

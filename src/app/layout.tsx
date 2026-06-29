@@ -135,7 +135,7 @@ const jsonLd = {
     "https://github.com/Vlex127",
     "https://x.com/0xvince1",
     "https://linkedin.com/in/vincentiwuno",
-    "https://instagram.com/0xvince",
+    "https://instagram.com/vincent_iwuno",
     "https://tryhackme.com/p/0xvince",
   ],
   knowsAbout: [
