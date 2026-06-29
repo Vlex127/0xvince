@@ -33,7 +33,7 @@ export const skills = [
     icon: "💻",
     title: "Programming & Scripting",
     desc: "Writing automation scripts, recon tools, and lightweight exploits from the ground up.",
-    tags: ["Python", "Bash", "SQL", "JavaScript", "HTML/CSS"],
+    tags: ["Python", "Bash", "SQL", "JavaScript", "HTML/CSS", "Docker", "Regex", "AST"],
   },
   {
     icon: "👁️",
@@ -72,8 +72,25 @@ export const experience = [
       "Built a Python + Nmap recon automation pipeline that auto-emails formatted scan reports to a custom domain inbox on completion",
       "Actively documenting research as technical blog posts to contribute back to the security community",
     ],
-    skills: ["Postfix", "GoPhish", "Python", "Nmap", "DNS", "Kali Linux", "SMTP", "DKIM/SPF/DMARC"],
+    skills: ["Postfix", "GoPhish", "Python", "Nmap", "DNS", "Kali Linux", "SMTP", "DKIM/SPF/DMARC", "MCP", "Docker"],
     link: "https://vincentiwuno.me",
+  },
+  {
+    date: "2026",
+    title: "MCP Server Developer — SecureOps AI",
+    org: "Open-source · Vlex127/secureops-mcp",
+    type: "research",
+    status: "current",
+    desc: "Built a local security auditing server that uses the Model Context Protocol to let LLMs run security scans without source code ever leaving the machine. Implements 14 security rules with 39 regex patterns, Python AST analysis for dangerous calls (eval, exec, pickle, os.system), .env file parsing, SARIF output, and path traversal protection on all file reads.",
+    highlights: [
+      "Designed and implemented a multi-analyzer architecture: RegexScanner, ASTAnalyzer, FileScanner, and DepScanner — each handling a different class of vulnerability",
+      "Built 5 MCP tools (run_local_security_audit, get_audit_summary, scan_directory_structure, read_file_securely, run_local_security_audit_sarif) with structured JSON responses",
+      "Added .env file scanning with specialized KEY=VALUE parsing that catches unquoted secrets — a common blind spot in standard regex scanners",
+      "Produced SARIF v2.1.0 output compatible with GitHub Advanced Security and VS Code SARIF Viewer for inline PR annotations",
+      "Created an interactive HTML dashboard for visualizing audit results with severity donut charts, risk score gauges, and searchable findings tables",
+    ],
+    skills: ["Python", "MCP", "AST", "Regex", "SARIF", "Docker", "Security Auditing", "LLM Integration"],
+    link: "https://github.com/Vlex127/secureops-mcp",
   },
   {
     date: "2025 — 2026",
@@ -152,6 +169,15 @@ export const projects = [
     impact: "",
     stack: ["Python", "Flask", "Nmap", "SQLite"],
     status: "wip",
+  },
+  {
+    num: "06",
+    title: "SecureOps MCP",
+    desc: "A local security auditing server using the Model Context Protocol — runs regex + AST + filename scans on your codebase through an LLM-powered interface. 14 security rules, 39 regex patterns, SARIF output, and path traversal protection. Zero source code ever leaves the machine.",
+    impact: "LLM-orchestrated security audits without sending source code to any third-party API.",
+    stack: ["Python", "MCP", "AST", "Regex", "SARIF", "Docker"],
+    status: "active",
+    link: "https://github.com/Vlex127/secureops-mcp",
   },
 ]
 
