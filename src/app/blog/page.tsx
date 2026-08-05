@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { blogPosts } from "@/lib/blog"
+import { getPublishedPosts, getUpcomingPosts } from "@/lib/blog"
 import type { Metadata } from "next"
 
 const SITE_URL = "https://vincentiwuno.me"
@@ -18,6 +18,9 @@ export const metadata: Metadata = {
 }
 
 export default function BlogPage() {
+  const published = getPublishedPosts()
+  const upcoming = getUpcomingPosts()
+
   return (
     <main className="min-h-screen bg-[var(--bg-base)]">
       <div className="max-w-[720px] mx-auto px-6 py-24 md:py-32">
@@ -37,9 +40,9 @@ export default function BlogPage() {
           </p>
         </div>
 
-        {/* Posts */}
+        {/* Published posts */}
         <div className="space-y-6">
-          {blogPosts.map((post) => (
+          {published.map((post) => (
             <Link
               key={post.slug}
               href={`/blog/${post.slug}`}
@@ -86,6 +89,33 @@ export default function BlogPage() {
             </Link>
           ))}
         </div>
+
+        {/* In the works */}
+        {upcoming.length > 0 && (
+          <div className="mt-20">
+            <p className="font-[family-name:var(--font-mono)] text-[10px] text-[var(--text-tertiary)] tracking-[0.2em] uppercase mb-5">
+              in the works
+            </p>
+            <div className="space-y-4">
+              {upcoming.map((post) => (
+                <div
+                  key={post.slug}
+                  className="flex items-start gap-4 p-5 rounded-xl border border-dashed border-[var(--border-subtle)] bg-[var(--bg-elevated)]/40"
+                >
+                  <span className="font-[family-name:var(--font-mono)] text-[9px] text-[var(--accent-light)] tracking-[0.12em] uppercase mt-1 shrink-0">
+                    drafting
+                  </span>
+                  <div>
+                    <h3 className="text-[14px] font-bold tracking-[-0.2px] text-[var(--text-primary)] mb-1">
+                      {post.title}
+                    </h3>
+                    <p className="text-[12px] text-[var(--text-secondary)] leading-[1.7]">{post.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </main>
   )

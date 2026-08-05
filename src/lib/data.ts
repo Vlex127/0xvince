@@ -1,6 +1,6 @@
 // lib/data.ts
 
-import { FaGithub, FaLinkedin, FaInstagram, FaXTwitter, FaEnvelope } from "react-icons/fa6"
+import { FaGithub, FaLinkedin, FaInstagram, FaXTwitter, FaEnvelope, FaTrophy } from "react-icons/fa6"
 import { SiTryhackme, SiHackthebox } from "react-icons/si"
 
 export const navLinks = [
@@ -135,6 +135,7 @@ export const projects = [
     impact: "Fully authenticated outbound email with 0 spam-folder delivery on major providers.",
     stack: ["Postfix", "Brevo", "DNS", "Kali Linux", "DKIM", "SPF", "DMARC"],
     status: "live",
+    screenshot: "/projects/smtp.svg",
     link: "https://vincentiwuno.me",
   },
   {
@@ -144,6 +145,7 @@ export const projects = [
     impact: "Revealed how small design decisions dramatically affect click-through and credential submission rates.",
     stack: ["GoPhish", "SMTP", "HTML/CSS", "Python"],
     status: "lab",
+    screenshot: "/projects/phishing.svg",
   },
   {
     num: "03",
@@ -152,6 +154,7 @@ export const projects = [
     impact: "Reduced manual recon documentation time significantly — scan-to-report in one command.",
     stack: ["Python", "Nmap", "Bash", "SMTP", "XML parsing"],
     status: "active",
+    screenshot: "/projects/recon.svg",
     link: "https://github.com/Vlex127",
   },
   {
@@ -177,6 +180,7 @@ export const projects = [
     impact: "LLM-orchestrated security audits without sending source code to any third-party API.",
     stack: ["Python", "MCP", "AST", "Regex", "SARIF", "Docker"],
     status: "active",
+    screenshot: "/projects/secureops.svg",
     link: "https://github.com/Vlex127/secureops-mcp",
   },
 ]
@@ -187,17 +191,17 @@ export const projects = [
 export const ctfStats = [
   {
     platform: "TryHackMe",
-    stat: "Active",
+    stat: "40+",
     badge: "Rooms completed",
     icon: "🏠",
-    href: "https://tryhackme.com/",
+    href: "https://tryhackme.com/p/0xvince",
   },
   {
     platform: "HackTheBox",
-    stat: "Active",
+    stat: "12+",
     badge: "Machines pwned",
     icon: "📦",
-    href: "https://hackthebox.com/",
+    href: "https://profile.hackthebox.com/profile/019fd33f-258c-71d2-8510-62d5bcd48ccc",
   },
   {
     platform: "Categories",
@@ -249,7 +253,8 @@ export const blogPosts = [
 export const socialLinks = [
   { label: "GitHub", href: "https://github.com/vlex127" },
   { label: "TryHackMe", href: "https://tryhackme.com/p/0xvince" },
-  { label: "HackTheBox", href: "https://hackthebox.com/" },
+  { label: "HackTheBox", href: "https://profile.hackthebox.com/profile/019fd33f-258c-71d2-8510-62d5bcd48ccc" },
+  { label: "HackerDNA", href: "https://hackerdna.com/users/vlex127" },
   { label: "LinkedIn", href: "https://linkedin.com/in/vincentiwuno" },
   { label: "X", href: "https://X.com/0xvince1" },
 ]
@@ -263,6 +268,7 @@ export const contactLinks = [
   { id: "twitter",   icon: FaXTwitter,   label: "@0xvince",                     href: "https://X.com/0xvince1" },
   { id: "linkedin",  icon: FaLinkedin,   label: "linkedin.com/in/vincentiwuno", href: "https://linkedin.com/in/vincentiwuno" },
   { id: "tryhackme", icon: SiTryhackme,  label: "tryhackme.com/p/0xvince",      href: "https://tryhackme.com/p/0xvince" },
-  { id: "hackthebox",icon: SiHackthebox, label: "hackthebox.com",               href: "https://hackthebox.com/" },
+  { id: "hackthebox",icon: SiHackthebox, label: "profile.hackthebox.com",       href: "https://profile.hackthebox.com/profile/019fd33f-258c-71d2-8510-62d5bcd48ccc" },
+  { id: "hackerdna", icon: FaTrophy,     label: "hackerdna.com/users/vlex127",  href: "https://hackerdna.com/users/vlex127" },
   { id: "instagram", icon: FaInstagram,  label: "@0xvince",                     href: "https://instagram.com/vincent_iwuno" },
 ]

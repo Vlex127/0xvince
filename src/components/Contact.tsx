@@ -34,12 +34,9 @@ export function Contact() {
     if (!form.message) return
 
     const subject = form.subject || "general inquiry"
-    const params = new URLSearchParams({
-      to: "0xvince@vincentiwuno.me",
-      su: subject,
-      body: form.message,
-    })
-    window.open(`https://mail.google.com/mail/?view=cm&fs=1&${params.toString()}`, "_blank")
+    const body = form.message.trim()
+    const mailto = `mailto:0xvince@vincentiwuno.me?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+    window.location.href = mailto
     setState("success")
   }
 
@@ -183,7 +180,7 @@ export function Contact() {
                   </div>
                   <h3 className="text-[18px] font-bold mb-2 text-[var(--text-primary)]">Message sent.</h3>
                   <p className="font-[family-name:var(--font-mono)] text-[12px] text-[var(--text-tertiary)] leading-[1.8] max-w-[280px]">
-                    Gmail should have opened — finish sending from there.
+                    Your email app should have opened — finish sending from there.
                   </p>
                   <motion.button
                     onClick={() => { setState("idle"); setForm({ subject: "", message: "" }) }}

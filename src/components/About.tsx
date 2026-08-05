@@ -53,7 +53,7 @@ function AvatarCard() {
 function CVButton() {
   return (
     <motion.a
-      href="./public/vincent-iwuno-cv.pdf"
+      href="/vincent-iwuno-cv.pdf"
       download="Vincent_Iwuno_CV.pdf"
       whileHover={{ y: -2 }}
       whileTap={{ scale: 0.97 }}
@@ -140,9 +140,9 @@ export function About() {
           <AnimatedSection delay={0.25}>
             <div className="flex gap-10 mb-10 py-6 border-y border-[var(--border-subtle)]">
               {[
-                { value: "10+", label: "Projects" },
+                { value: "06", label: "Projects" },
                 { value: "5+", label: "Categories" },
-                { value: "2+", label: "Platforms" },
+                { value: "2", label: "Platforms" },
               ].map((stat) => (
                 <div key={stat.label}>
                   <div className="text-2xl font-extrabold text-[var(--text-primary)] tracking-[-1px]">

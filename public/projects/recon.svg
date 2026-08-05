@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0a0d0b"/>
+      <stop offset="1" stop-color="#111a14"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#3ddc84"/>
+      <stop offset="1" stop-color="#6c5ce7"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="675" fill="url(#bg)"/>
+  <rect x="0" y="0" width="1200" height="42" fill="#0b0f0d"/>
+  <circle cx="26" cy="21" r="7" fill="#ff5f57"/>
+  <circle cx="50" cy="21" r="7" fill="#febc2e"/>
+  <circle cx="74" cy="21" r="7" fill="#28c840"/>
+  <text x="600" y="27" text-anchor="middle" fill="#555" font-family="monospace" font-size="15" font-weight="bold">recon-toolkit — /opt/recon</text>
+  <text x="60" y="110" fill="#3ddc84" font-family="monospace" font-size="24" font-weight="bold">🗺 NETWORK RECON AUTOMATION</text>
+  <text x="60" y="145" fill="#8a8a9a" font-family="monospace" font-size="18">nmap wrapper · XML → report · auto-email</text>
+  <rect x="60" y="185" width="1080" height="300" rx="12" fill="#0a0e0c" stroke="#1f2a24"/>
+  <text x="90" y="225" fill="#3ddc84" font-family="monospace" font-size="18" font-weight="bold">$ python3 recon.py --target 10.10.10.0/24 --scan full</text>
+  <text x="90" y="265" fill="#8a8a9a" font-family="monospace" font-size="17">Starting Nmap 7.94</text>
+  <text x="90" y="300" fill="#8a8a9a" font-family="monospace" font-size="17">Host 10.10.10.14  ─  22/tcp open ssh</text>
+  <text x="90" y="335" fill="#8a8a9a" font-family="monospace" font-size="17">Host 10.10.10.20  ─  80/tcp open http</text>
+  <text x="90" y="370" fill="#8a8a9a" font-family="monospace" font-size="17">Host 10.10.10.20  ─  443/tcp open https</text>
+  <text x="90" y="410" fill="#3ddc84" font-family="monospace" font-size="17" font-weight="bold">✓ scan complete · emailed report to inbox</text>
+  <text x="90" y="448" fill="#5a5a6a" font-family="monospace" font-size="15">report.pdf → custom domain inbox · one command</text>
+  <rect x="60" y="510" width="1080" height="100" rx="12" fill="#0e1511" stroke="#1e3a2a"/>
+  <text x="90" y="552" fill="#3ddc84" font-family="monospace" font-size="20" font-weight="bold">⚡ scan-to-report in one command</text>
+  <text x="90" y="588" fill="#5a5a6a" font-family="monospace" font-size="16">cut manual recon documentation time significantly</text>
+</svg>

@@ -325,3 +325,7 @@ export function getBlogPost(slug: string): BlogPost | undefined {
 export function getPublishedPosts(): BlogPost[] {
   return blogPosts.filter((p) => !p.content.includes("Coming Soon"))
 }
+
+export function getUpcomingPosts(): BlogPost[] {
+  return blogPosts.filter((p) => p.content.includes("Coming Soon"))
+}

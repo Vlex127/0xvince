@@ -1,13 +1,13 @@
 import { notFound } from "next/navigation"
 import Link from "next/link"
-import { blogPosts, getBlogPost } from "@/lib/blog"
+import { getPublishedPosts, getBlogPost } from "@/lib/blog"
 import { BlogPostContent } from "./content"
 import type { Metadata } from "next"
 
 const SITE_URL = "https://vincentiwuno.me"
 
 export async function generateStaticParams() {
-  return blogPosts.map((post) => ({ slug: post.slug }))
+  return getPublishedPosts().map((post) => ({ slug: post.slug }))
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
@@ -41,6 +41,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const { slug } = await params
   const post = getBlogPost(slug)
   if (!post) notFound()
+  if (!getPublishedPosts().some((p) => p.slug === post.slug)) notFound()
 
   return (
     <main className="min-h-screen bg-[var(--bg-base)]">

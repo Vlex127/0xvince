@@ -1,11 +1,11 @@
 # 0xVince — Portfolio
 
-> Personal cybersecurity portfolio built with Next.js 14, Framer Motion, and Tailwind CSS.
+> Personal cybersecurity portfolio built with Next.js 16, Framer Motion, and Tailwind CSS.
 
-![Portfolio Preview](./public/preview.png)
+![Portfolio Preview](./docs/preview.png)
 ![License](https://img.shields.io/badge/license-MIT-6C5CE7)
-![Next.js](https://img.shields.io/badge/Next.js-14-black)
-![Tailwind](https://img.shields.io/badge/Tailwind-3-38bdf8)
+![Next.js](https://img.shields.io/badge/Next.js-16-black)
+![Tailwind](https://img.shields.io/badge/Tailwind-4-38bdf8)
 
 ## Live Site
 **[vincentiwuno.me](https://vincentiwuno.me)**
@@ -16,8 +16,8 @@
 
 | Layer | Tech |
 |---|---|
-| Framework | Next.js 14 (App Router) |
-| Styling | Tailwind CSS |
+| Framework | Next.js 16 (App Router) |
+| Styling | Tailwind CSS v4 |
 | Animations | Framer Motion |
 | Fonts | Inter + JetBrains Mono |
 | Deployment | Vercel |
@@ -52,8 +52,8 @@
 ## Local Development
 
 ```bash
-git clone https://github.com/vlex127/oxvince
-cd portfolio
+git clone https://github.com/Vlex127/0xvince
+cd 0xvince
 npm install
 npm run dev
 ```

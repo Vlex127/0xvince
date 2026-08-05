@@ -35,6 +35,7 @@ function ProjectCard({ project, index }: { project: (typeof projects)[0] & { sta
   const isWip = statusKey === "wip"
   const link = (project as any).link as string | undefined
   const impact = (project as any).impact as string | undefined
+  const screenshot = (project as any).screenshot as string | undefined
 
   return (
     <motion.div
@@ -83,6 +84,20 @@ function ProjectCard({ project, index }: { project: (typeof projects)[0] & { sta
           >
             soon
           </span>
+        </div>
+      )}
+
+      {/* Screenshot */}
+      {screenshot && !isWip && (
+        <div className="relative h-[150px] overflow-hidden shrink-0 group-hover:scale-[1.02] transition-transform duration-500 origin-top">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={screenshot}
+            alt={`${project.title} preview`}
+            className="w-full h-full object-cover object-top"
+            loading="lazy"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--bg-surface)]/20 to-[var(--bg-surface)]" />
         </div>
       )}
 

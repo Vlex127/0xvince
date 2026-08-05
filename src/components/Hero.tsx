@@ -218,9 +218,9 @@ export function Hero() {
         className="hidden lg:flex absolute right-12 bottom-24 flex-col gap-8 z-10"
       >
         {[
-          { num: "10", suffix: "+", label: "projects shipped" },
-          { num: "∞", suffix: "", label: "ctf challenges" },
-          { num: "0", suffix: "day", label: "research focus" },
+          { num: "06", suffix: "", label: "projects shipped" },
+          { num: "5", suffix: "+", label: "ctf categories" },
+          { num: "100", suffix: "%", label: "email deliverability" },
         ].map((stat, i) => (
           <motion.div
             key={stat.label}
