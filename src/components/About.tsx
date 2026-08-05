@@ -53,7 +53,7 @@ function AvatarCard() {
 function CVButton() {
   return (
     <motion.a
-      href="/vincent-iwuno-cv.pdf"
+      href="./public/vincent-iwuno-cv.pdf"
       download="Vincent_Iwuno_CV.pdf"
       whileHover={{ y: -2 }}
       whileTap={{ scale: 0.97 }}

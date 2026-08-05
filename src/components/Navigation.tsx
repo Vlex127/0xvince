@@ -47,7 +47,7 @@ export function Navigation() {
 
         {/* CV download button — desktop */}
         <a
-          href="/vincent-iwuno-cv.pdf"
+          href="./public/vincent-iwuno-cv.pdf"
           download
           className="hidden md:inline-flex items-center gap-2 font-[family-name:var(--font-mono)] text-[11px] text-[var(--accent-light)] tracking-[0.08em] lowercase px-4 py-2 border border-[var(--accent-light)]/30 rounded-md hover:bg-[var(--accent)]/10 hover:border-[var(--accent-light)]/50 transition-all duration-300 no-underline"
         >
@@ -100,7 +100,7 @@ export function Navigation() {
               </motion.a>
             ))}
             <motion.a
-              href="/vincent-iwuno-cv.pdf"
+              href="./public/vincent-iwuno-cv.pdf"
               download
               onClick={() => setMobileOpen(false)}
               initial={{ opacity: 0, y: 20 }}

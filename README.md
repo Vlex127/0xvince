@@ -2,7 +2,7 @@
 
 > Personal cybersecurity portfolio built with Next.js 14, Framer Motion, and Tailwind CSS.
 
-![Portfolio Preview](./docs/preview.png)
+![Portfolio Preview](./public/preview.png)
 ![License](https://img.shields.io/badge/license-MIT-6C5CE7)
 ![Next.js](https://img.shields.io/badge/Next.js-14-black)
 ![Tailwind](https://img.shields.io/badge/Tailwind-3-38bdf8)
