@@ -11,6 +11,7 @@ export const navLinks = [
   { label: "ctf", href: "#ctf" },
   { label: "blog", href: "/blog" },
   { label: "contact", href: "#contact" },
+  { label: "uses", href: "/uses" },
 ]
 
 // ─────────────────────────────────────────
@@ -52,6 +53,18 @@ export const skills = [
     title: "Web Application Security",
     desc: "End-to-end web vuln testing aligned with industry-standard methodology.",
     tags: ["XSS", "SQLi", "CSRF", "LFI/RFI", "OWASP Top 10", "Recon-ng"],
+  },
+  {
+    icon: "🖥️",
+    title: "Application Development",
+    desc: "Building full-stack apps and tooling — from Next.js dashboards and API backends to Python automation with real databases and deployments.",
+    tags: ["Next.js", "React", "TypeScript", "Python", "Flask", "SQLite", "REST APIs", "Docker"],
+  },
+  {
+    icon: "🧬",
+    title: "Reverse Engineering",
+    desc: "Taking binaries apart to understand how they really behave — low-level analysis, debugging, and finding the hidden logic.",
+    tags: ["GDB", "Ghidra", "Assembly", "x86/x64", "Binary Exploitation", "Obfuscation"],
   },
 ]
 
@@ -182,68 +195,6 @@ export const projects = [
     status: "active",
     screenshot: "/projects/secureops.svg",
     link: "https://github.com/Vlex127/secureops-mcp",
-  },
-]
-
-// ─────────────────────────────────────────
-// CTF STATS
-// ─────────────────────────────────────────
-export const ctfStats = [
-  {
-    platform: "TryHackMe",
-    stat: "40+",
-    badge: "Rooms completed",
-    icon: "🏠",
-    href: "https://tryhackme.com/p/0xvince",
-  },
-  {
-    platform: "HackTheBox",
-    stat: "12+",
-    badge: "Machines pwned",
-    icon: "📦",
-    href: "https://profile.hackthebox.com/profile/019fd33f-258c-71d2-8510-62d5bcd48ccc",
-  },
-  {
-    platform: "Categories",
-    stat: "5+",
-    badge: "Web · Pwn · Crypto · Forensics · OSINT",
-    icon: "🗂️",
-  },
-  {
-    platform: "Techniques",
-    stat: "10+",
-    badge: "XSS · SQLi · LFI · PrivEsc · RCE",
-    icon: "⚙️",
-  },
-]
-
-// ─────────────────────────────────────────
-// BLOG POSTS
-// ─────────────────────────────────────────
-export const blogPosts = [
-  {
-    slug: "building-a-production-mail-server-on-kali-linux",
-    tag: "smtp · infrastructure",
-    title: "Building a production mail server on Kali Linux from scratch",
-    desc: "A full walkthrough: Postfix setup, Brevo relay configuration, DKIM key generation, SPF/DMARC record publishing, and testing deliverability — all on a custom domain.",
-    meta: "published · 2026",
-    readTime: "12 min read",
-  },
-  {
-    slug: "gophish-lab-simulating-phishing-campaigns",
-    tag: "phishing · red team",
-    title: "GoPhish lab: simulating a phishing campaign end-to-end",
-    desc: "Setting up GoPhish, crafting convincing lure emails, building credential-capture landing pages, and what the data tells you about human vulnerability.",
-    meta: "coming soon · 2026",
-    readTime: "9 min read",
-  },
-  {
-    slug: "spf-dkim-dmarc-what-they-actually-do",
-    tag: "dns · email security",
-    title: "SPF, DKIM, DMARC — what they actually do and how to break them",
-    desc: "Not just definitions — a practical look at how email authentication works at the packet level, and what happens when each record is misconfigured.",
-    meta: "coming soon · 2026",
-    readTime: "10 min read",
   },
 ]
 

@@ -1,6 +1,5 @@
 "use client"
 
-import { motion } from "framer-motion"
 import { useEffect, useState } from "react"
 
 const LINES = [
@@ -43,19 +42,14 @@ export default function NotFound() {
           {/* Terminal body */}
           <div className="p-5 font-[family-name:var(--font-mono)] text-[12px] leading-[2] min-h-[240px]">
             {LINES.slice(0, visible).map((line, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, x: -8 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.2 }}
-              >
+              <div key={i}>
                 {line.prefix && (
                   <span className="text-[var(--accent-light)]">{line.prefix} </span>
                 )}
                 <span className={line.error ? "text-[var(--error)]" : "text-[var(--text-secondary)]"}>
                   {line.text}
                 </span>
-              </motion.div>
+              </div>
             ))}
             {visible < LINES.length && (
               <span className="inline-block w-[7px] h-[14px] bg-[var(--accent-light)] animate-pulse ml-0.5 align-middle" />
@@ -64,15 +58,14 @@ export default function NotFound() {
         </div>
 
         {/* Back link */}
-        <motion.a
+        <a
           href="/"
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: visible >= LINES.length ? 1 : 0, y: visible >= LINES.length ? 0 : 10 }}
-          transition={{ delay: 0.3, duration: 0.5 }}
-          className="mt-8 inline-flex items-center gap-2 font-[family-name:var(--font-mono)] text-[12px] text-[var(--accent-light)] tracking-[0.08em] no-underline hover:underline underline-offset-4"
+          className={`mt-8 inline-flex items-center gap-2 font-[family-name:var(--font-mono)] text-[12px] text-[var(--accent-light)] tracking-[0.08em] no-underline hover:underline underline-offset-4 transition-opacity duration-500 ${
+            visible >= LINES.length ? "opacity-100" : "opacity-0 pointer-events-none"
+          }`}
         >
           ← back to home
-        </motion.a>
+        </a>
       </div>
     </div>
   )

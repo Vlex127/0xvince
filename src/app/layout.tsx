@@ -180,6 +180,11 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
         <script
+          defer
+          data-domain="vincentiwuno.me"
+          src="https://plausible.io/js/script.js"
+        />
+        <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />

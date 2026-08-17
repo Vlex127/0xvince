@@ -1,11 +1,5 @@
-"use client"
+import { AnimatedSection } from "./AnimatedSection"
 
-import { motion, useMotionValue, useSpring } from "framer-motion"
-import { useRef, useState } from "react"
-import { AnimatedSection, StaggerContainer, staggerItem } from "./AnimatedSection"
-import { ctfStats } from "@/lib/data"
-
-// ── Update ctfStats in data.ts to match this shape ──
 const platforms = [
   {
     name: "TryHackMe",
@@ -54,13 +48,20 @@ const platforms = [
 ]
 
 const skills = [
-  { label: "Web Exploitation",      pct: 78, color: "rgba(108,92,231,1)" },
-  { label: "Privilege Escalation",  pct: 65, color: "rgba(159,239,0,1)"  },
-  { label: "Network Forensics",     pct: 60, color: "rgba(52,211,153,1)" },
-  { label: "Cryptography",          pct: 50, color: "rgba(251,191,36,1)" },
-  { label: "OSINT",                 pct: 72, color: "rgba(96,165,250,1)" },
-  { label: "Binary / Pwn",          pct: 42, color: "rgba(220,80,80,1)"  },
+  { label: "Web Exploitation",      level: "proficient", pct: 85, color: "rgba(108,92,231,1)" },
+  { label: "Privilege Escalation",  level: "comfortable", pct: 70, color: "rgba(159,239,0,1)"  },
+  { label: "Network Forensics",     level: "comfortable", pct: 70, color: "rgba(52,211,153,1)" },
+  { label: "Cryptography",          level: "familiar",   pct: 55, color: "rgba(251,191,36,1)" },
+  { label: "OSINT",                 level: "proficient", pct: 85, color: "rgba(96,165,250,1)" },
+  { label: "Binary / Pwn",          level: "learning",   pct: 40, color: "rgba(220,80,80,1)"  },
 ]
+
+const LEVEL_LABEL: Record<string, string> = {
+  proficient: "proficient",
+  comfortable: "comfortable",
+  familiar: "familiar",
+  learning: "in progress",
+}
 
 const upcomingWriteups = [
   { title: "Exploiting SSRF to reach internal AWS metadata",     category: "web",      diff: "medium" },
@@ -76,47 +77,8 @@ const DIFF_COLOR: Record<string, string> = {
 }
 
 function PlatformCard({ p }: { p: typeof platforms[0] }) {
-  const ref = useRef<HTMLDivElement>(null)
-  const [hovered, setHovered] = useState(false)
-  const mx = useMotionValue(0)
-  const my = useMotionValue(0)
-  const sx = useSpring(mx, { stiffness: 180, damping: 18 })
-  const sy = useSpring(my, { stiffness: 180, damping: 18 })
-
-  function onMouseMove(e: React.MouseEvent<HTMLDivElement>) {
-    const r = ref.current?.getBoundingClientRect()
-    if (!r) return
-    mx.set(e.clientX - r.left)
-    my.set(e.clientY - r.top)
-  }
-
   return (
-    <motion.div
-      ref={ref}
-      variants={staggerItem}
-      onMouseMove={onMouseMove}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      whileHover={{ y: -6 }}
-      transition={{ type: "spring", stiffness: 280, damping: 22 }}
-      className="group relative bg-[var(--bg-base)] border border-[var(--border-subtle)] rounded-xl overflow-hidden cursor-default"
-      style={{
-        boxShadow: hovered
-          ? `0 16px 48px rgba(0,0,0,0.35), 0 0 0 1px ${p.color.replace("1)", "0.15)")}`
-          : "0 2px 8px rgba(0,0,0,0.12)",
-        transition: "box-shadow 0.4s ease",
-      }}
-    >
-      {/* Mouse glow */}
-      <motion.div
-        className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-        style={{
-          background: hovered
-            ? `radial-gradient(180px circle at ${sx.get()}px ${sy.get()}px, ${p.color.replace("1)", "0.07)")}, transparent 70%)`
-            : "none",
-        }}
-      />
-
+    <div className="group relative bg-[var(--bg-base)] border border-[var(--border-subtle)] rounded-xl overflow-hidden cursor-default transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_16px_48px_rgba(0,0,0,0.35)]">
       {/* Top accent */}
       <div
         className="absolute top-0 left-0 right-0 h-[2px] scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"
@@ -131,7 +93,6 @@ function PlatformCard({ p }: { p: typeof platforms[0] }) {
             style={{
               background: p.bg,
               borderColor: p.color.replace("1)", "0.2)"),
-              boxShadow: hovered ? `0 0 16px ${p.color.replace("1)", "0.15)")}` : "none",
             }}
           >
             {p.icon}
@@ -170,41 +131,31 @@ function PlatformCard({ p }: { p: typeof platforms[0] }) {
           </div>
         </div>
       </div>
-    </motion.div>
+    </div>
   )
 }
 
-function SkillBar({ label, pct, color, delay }: { label: string; pct: number; color: string; delay: number }) {
+function SkillBar({ label, level, pct, color }: { label: string; level: string; pct: number; color: string }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, x: -16 }}
-      whileInView={{ opacity: 1, x: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-      className="group"
-    >
+    <div>
       <div className="flex items-center justify-between mb-1.5">
         <span className="font-[family-name:var(--font-mono)] text-[11px] text-[var(--text-secondary)] tracking-[0.08em]">
           {label}
         </span>
-        <span className="font-[family-name:var(--font-mono)] text-[10px]" style={{ color }}>
-          {pct}%
+        <span className="font-[family-name:var(--font-mono)] text-[10px] capitalize" style={{ color }}>
+          {LEVEL_LABEL[level] ?? level}
         </span>
       </div>
       <div className="h-[3px] w-full bg-[var(--border-subtle)] rounded-full overflow-hidden">
-        <motion.div
-          initial={{ width: 0 }}
-          whileInView={{ width: `${pct}%` }}
-          viewport={{ once: true }}
-          transition={{ delay: delay + 0.1, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+        <div
           className="h-full rounded-full"
           style={{
+            width: `${pct}%`,
             background: `linear-gradient(to right, ${color.replace("1)", "0.6)")}, ${color})`,
-            boxShadow: `0 0 8px ${color.replace("1)", "0.4)")}`,
           }}
         />
       </div>
-    </motion.div>
+    </div>
   )
 }
 
@@ -254,7 +205,6 @@ export function CTF() {
             <p className="mt-2"><span className="text-[var(--accent-light)]">$</span> <span className="text-emerald-400">status</span></p>
             <p className="pl-2 flex items-center gap-2">
               <span className="relative flex h-1.5 w-1.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60" />
                 <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-400" />
               </span>
               <span className="text-emerald-400">actively solving · writeups incoming</span>
@@ -264,11 +214,11 @@ export function CTF() {
       </AnimatedSection>
 
       {/* ── PLATFORM CARDS ── */}
-      <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-20">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-20">
         {platforms.map((p) => (
           <PlatformCard key={p.name} p={p} />
         ))}
-      </StaggerContainer>
+      </div>
 
       {/* ── SKILL BREAKDOWN ── */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 mb-20">
@@ -278,12 +228,12 @@ export function CTF() {
               skill breakdown
             </p>
             <div className="space-y-5">
-              {skills.map((s, i) => (
-                <SkillBar key={s.label} {...s} delay={i * 0.07} />
+              {skills.map((s) => (
+                <SkillBar key={s.label} {...s} />
               ))}
             </div>
             <p className="font-[family-name:var(--font-mono)] text-[10px] text-[var(--text-tertiary)] mt-5 leading-[1.7]">
-              self-assessed based on challenges solved and concepts applied in lab environments.
+              self-assessed proficiency across lab environments — not benchmark scores.
             </p>
           </div>
         </AnimatedSection>
@@ -295,19 +245,15 @@ export function CTF() {
               writeups in progress
             </p>
             <div className="space-y-3">
-              {upcomingWriteups.map((w, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, x: 16 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.08, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              {upcomingWriteups.map((w) => (
+                <div
+                  key={w.title}
                   className="group flex items-start gap-3 p-4 rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-base)] hover:border-[var(--border-default)] transition-all duration-300 cursor-default"
                 >
                   {/* Diff dot */}
                   <div
                     className="w-1.5 h-1.5 rounded-full mt-[5px] shrink-0"
-                    style={{ background: DIFF_COLOR[w.diff], boxShadow: `0 0 6px ${DIFF_COLOR[w.diff]}` }}
+                    style={{ background: DIFF_COLOR[w.diff] }}
                   />
                   <div className="flex-1 min-w-0">
                     <p className="text-[12px] text-[var(--text-secondary)] leading-[1.6] group-hover:text-[var(--text-primary)] transition-colors duration-200">
@@ -328,7 +274,7 @@ export function CTF() {
                   <span className="font-[family-name:var(--font-mono)] text-[9px] text-[var(--text-tertiary)] shrink-0 opacity-50 mt-[3px]">
                     soon
                   </span>
-                </motion.div>
+                </div>
               ))}
             </div>
 
@@ -362,7 +308,6 @@ export function CTF() {
           </p>
           <div className="flex items-center gap-2">
             <span className="relative flex h-1.5 w-1.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60" />
               <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-400" />
             </span>
             <span className="font-[family-name:var(--font-mono)] text-[10px] text-[var(--text-tertiary)] tracking-[0.12em]">

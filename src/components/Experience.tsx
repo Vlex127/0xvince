@@ -1,16 +1,8 @@
 "use client"
 
-import { motion, useScroll, useSpring, useTransform } from "framer-motion"
-import { useRef, useState } from "react"
-import { AnimatedSection, StaggerContainer, staggerItem } from "./AnimatedSection"
+import { useState } from "react"
+import { AnimatedSection } from "./AnimatedSection"
 import { experience } from "@/lib/data"
-
-// ── Add these fields to your experience data in /lib/data.ts ──
-// type: "work" | "ctf" | "research" | "education"
-// status: "current" | "completed"
-// highlights: string[]   ← bullet achievements (recruiter gold)
-// skills: string[]       ← tech tags per role
-// link?: string          ← optional proof/writeup URL
 
 const TYPE_CONFIG = {
   work:      { label: "Work",      color: "rgba(108,92,231,1)",  bg: "rgba(108,92,231,0.12)" },
@@ -22,7 +14,6 @@ const TYPE_CONFIG = {
 function ExperienceCard({
   exp,
   index,
-  isLast,
 }: {
   exp: (typeof experience)[0] & {
     type?: keyof typeof TYPE_CONFIG
@@ -32,7 +23,6 @@ function ExperienceCard({
     link?: string
   }
   index: number
-  isLast: boolean
 }) {
   const [expanded, setExpanded] = useState(index === 0)
   const typeKey = (exp as any).type ?? "work"
@@ -40,28 +30,22 @@ function ExperienceCard({
   const isCurrent = (exp as any).status === "current"
 
   return (
-    <motion.div
-      variants={staggerItem}
-      className="relative group"
-    >
-    
+    <div className="relative group">
       {/* Timeline dot */}
       <div className="absolute -left-[44px] top-[22px] flex items-center justify-center">
         <div
-          className="w-[10px] h-[10px] rounded-full z-10 transition-transform duration-300 group-hover:scale-125"
+          className="w-[10px] h-[10px] rounded-full z-10"
           style={{ background: cfg.color, boxShadow: `0 0 12px ${cfg.color}` }}
         />
         <div
-          className="absolute w-[22px] h-[22px] rounded-full border opacity-30 group-hover:opacity-60 transition-opacity duration-300"
+          className="absolute w-[22px] h-[22px] rounded-full border opacity-30"
           style={{ borderColor: cfg.color }}
         />
       </div>
 
       {/* Card */}
-      <motion.div
+      <div
         onClick={() => setExpanded(e => !e)}
-        whileHover={{ x: 4 }}
-        transition={{ type: "spring", stiffness: 300, damping: 28 }}
         className="relative bg-[var(--bg-elevated)] border border-[var(--border-subtle)] rounded-xl overflow-hidden cursor-pointer transition-all duration-300 hover:border-[var(--border-default)] hover:shadow-[0_8px_32px_rgba(0,0,0,0.3)]"
       >
         {/* Left accent bar */}
@@ -94,20 +78,17 @@ function ExperienceCard({
               {isCurrent && (
                 <span className="inline-flex items-center gap-1.5 font-[family-name:var(--font-mono)] text-[9px] px-2 py-[3px] rounded-[3px] bg-emerald-500/10 text-emerald-400 tracking-[0.12em] uppercase">
                   <span className="relative flex h-1.5 w-1.5">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60" />
                     <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-400" />
                   </span>
                   current
                 </span>
               )}
               {/* Expand toggle */}
-              <motion.span
-                animate={{ rotate: expanded ? 180 : 0 }}
-                transition={{ duration: 0.25 }}
-                className="text-[var(--text-tertiary)] text-xs ml-1 select-none"
+              <span
+                className={`text-[var(--text-tertiary)] text-xs ml-1 select-none transition-transform duration-300 inline-block ${expanded ? "rotate-180" : ""}`}
               >
                 ↓
-              </motion.span>
+              </span>
             </div>
           </div>
 
@@ -138,69 +119,52 @@ function ExperienceCard({
           </p>
 
           {/* Expandable section */}
-          <motion.div
-            initial={false}
-            animate={{ height: expanded ? "auto" : 0, opacity: expanded ? 1 : 0 }}
-            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-            style={{ overflow: "hidden" }}
-          >
-            {/* Highlights */}
-            {(exp as any).highlights?.length > 0 && (
-              <div className="mb-4 pt-4 border-t border-[var(--border-subtle)]">
-                <p className="font-[family-name:var(--font-mono)] text-[9px] text-[var(--text-tertiary)] tracking-[0.2em] uppercase mb-3">
-                  key highlights
-                </p>
-                <ul className="space-y-2">
-                  {(exp as any).highlights.map((h: string, i: number) => (
-                    <motion.li
-                      key={i}
-                      initial={{ opacity: 0, x: -8 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: i * 0.06 }}
-                      className="flex items-start gap-2.5 text-[12px] text-[var(--text-secondary)] leading-[1.7]"
-                    >
-                      <span style={{ color: cfg.color }} className="mt-[5px] text-[8px] shrink-0">▶</span>
-                      {h}
-                    </motion.li>
-                  ))}
-                </ul>
-              </div>
-            )}
+          {expanded && (
+            <div className="border-t border-[var(--border-subtle)] pt-4">
+              {/* Highlights */}
+              {(exp as any).highlights?.length > 0 && (
+                <div className="mb-4">
+                  <p className="font-[family-name:var(--font-mono)] text-[9px] text-[var(--text-tertiary)] tracking-[0.2em] uppercase mb-3">
+                    key highlights
+                  </p>
+                  <ul className="space-y-2">
+                    {(exp as any).highlights.map((h: string, i: number) => (
+                      <li
+                        key={i}
+                        className="flex items-start gap-2.5 text-[12px] text-[var(--text-secondary)] leading-[1.7]"
+                      >
+                        <span style={{ color: cfg.color }} className="mt-[5px] text-[8px] shrink-0">▶</span>
+                        {h}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
 
-            {/* Skill tags */}
-            {(exp as any).skills?.length > 0 && (
-              <div className="flex flex-wrap gap-1.5 pt-2">
-                {(exp as any).skills.map((s: string) => (
-                  <span
-                    key={s}
-                    className="font-[family-name:var(--font-mono)] text-[9px] px-2 py-[4px] rounded-[3px] border border-[var(--border-subtle)] text-[var(--text-tertiary)] bg-[var(--bg-surface)]"
-                  >
-                    {s}
-                  </span>
-                ))}
-              </div>
-            )}
-          </motion.div>
+              {/* Skill tags */}
+              {(exp as any).skills?.length > 0 && (
+                <div className="flex flex-wrap gap-1.5 pt-2">
+                  {(exp as any).skills.map((s: string) => (
+                    <span
+                      key={s}
+                      className="font-[family-name:var(--font-mono)] text-[9px] px-2 py-[4px] rounded-[3px] border border-[var(--border-subtle)] text-[var(--text-tertiary)] bg-[var(--bg-surface)]"
+                    >
+                      {s}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
         </div>
-      </motion.div>
-    </motion.div>
+      </div>
+    </div>
   )
 }
 
 export function Experience() {
-  const sectionRef = useRef<HTMLElement>(null)
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start 80%", "end 20%"],
-  })
-  const lineScaleY = useSpring(useTransform(scrollYProgress, [0, 1], [0, 1]), {
-    stiffness: 80,
-    damping: 20,
-  })
-
   return (
     <section
-      ref={sectionRef}
       id="experience"
       className="py-[120px] px-6 md:px-12 bg-[var(--bg-surface)] relative overflow-hidden"
     >
@@ -233,7 +197,7 @@ export function Experience() {
             <div key={key} className="flex items-center gap-1.5">
               <span
                 className="w-2 h-2 rounded-full"
-                style={{ background: val.color, boxShadow: `0 0 6px ${val.color}` }}
+                style={{ background: val.color }}
               />
               <span className="font-[family-name:var(--font-mono)] text-[10px] text-[var(--text-tertiary)] tracking-[0.12em]">
                 {val.label}
@@ -244,13 +208,9 @@ export function Experience() {
       </AnimatedSection>
 
       {/* Timeline */}
-      <StaggerContainer className="relative pl-10">
-        {/* Animated scroll-driven line */}
-        <div className="absolute left-0 top-2 bottom-2 w-px bg-[var(--border-subtle)]" />
-        <motion.div
-          className="absolute left-0 top-2 w-px bg-gradient-to-b from-[var(--accent-light)] via-[rgba(108,92,231,0.5)] to-transparent origin-top"
-          style={{ scaleY: lineScaleY, height: "100%" }}
-        />
+      <div className="relative pl-10">
+        {/* Static timeline line */}
+        <div className="absolute left-0 top-2 bottom-2 w-px bg-gradient-to-b from-[var(--accent-light)] via-[rgba(108,92,231,0.5)] to-transparent" />
 
         <div className="space-y-6">
           {experience.map((exp, i) => (
@@ -258,11 +218,10 @@ export function Experience() {
               key={(exp as any).date ?? i}
               exp={exp as any}
               index={i}
-              isLast={i === experience.length - 1}
             />
           ))}
         </div>
-      </StaggerContainer>
+      </div>
 
       {/* Bottom CTA */}
       <AnimatedSection delay={0.2}>

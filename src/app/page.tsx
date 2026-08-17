@@ -9,13 +9,11 @@ import { Blog } from "@/components/Blog"
 import { Contact } from "@/components/Contact"
 import { Footer } from "@/components/Footer"
 import { Divider } from "@/components/Divider"
-import { Loader } from "@/components/Loader"
 import { KonamiEasterEgg } from "@/components/KonamiEasterEgg"
 
 export default function Home() {
   return (
     <>
-      <Loader />
       <Navigation />
       <KonamiEasterEgg />
       <main>

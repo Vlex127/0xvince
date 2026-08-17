@@ -1,71 +1,39 @@
-"use client"
-
-import { motion, useMotionValue, useTransform, useSpring } from "framer-motion"
 import Image from "next/image"
-import { useRef, type MouseEvent } from "react"
-import { AnimatedSection, StaggerContainer, staggerItem } from "./AnimatedSection"
+import { AnimatedSection } from "./AnimatedSection"
 import { socialLinks } from "@/lib/data"
 
 function AvatarCard() {
-  const x = useMotionValue(0)
-  const y = useMotionValue(0)
-  const rotateX = useSpring(useTransform(y, [-150, 150], [8, -8]), { damping: 20, stiffness: 200 })
-  const rotateY = useSpring(useTransform(x, [-150, 150], [-8, 8]), { damping: 20, stiffness: 200 })
-
-  const handleMouseMove = (e: MouseEvent) => {
-    const rect = e.currentTarget.getBoundingClientRect()
-    x.set(e.clientX - rect.left - rect.width / 2)
-    y.set(e.clientY - rect.top - rect.height / 2)
-  }
-
-  const handleMouseLeave = () => {
-    x.set(0)
-    y.set(0)
-  }
-
   return (
     <AnimatedSection delay={0.3} className="flex items-center justify-center">
-      <motion.div
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
-        style={{ rotateX, rotateY, transformPerspective: 800 }}
-        className="relative group"
-      >
-        <div className="absolute -inset-8 bg-[radial-gradient(circle,rgba(108,92,231,0.18),transparent_65%)] rounded-full blur-[60px] animate-[pulseGlow_4s_ease-in-out_infinite] pointer-events-none" />
-        <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-br from-[var(--accent-light)]/30 via-transparent to-[var(--accent)]/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-        <div className="relative w-[300px] h-[380px] rounded-2xl overflow-hidden border border-[var(--border-default)] group-hover:border-[var(--border-strong)] transition-colors duration-500">
+      <div className="relative group">
+        <div className="relative w-[300px] h-[380px] rounded-2xl overflow-hidden border border-[var(--border-default)] transition-colors duration-500 group-hover:border-[var(--border-strong)]">
           <Image
             src="/profile.png"
             alt="Vincent Iwuno — 0xVince"
             fill
             sizes="(max-width: 768px) 300px, 300px"
             quality={90}
-            className="object-cover object-top group-hover:scale-105 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
+            className="object-cover object-top"
             priority
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none" />
         </div>
-      </motion.div>
+      </div>
     </AnimatedSection>
   )
 }
 
 function CVButton() {
   return (
-    <motion.a
+    <a
       href="/vincent-iwuno-cv.pdf"
       download="Vincent_Iwuno_CV.pdf"
-      whileHover={{ y: -2 }}
-      whileTap={{ scale: 0.97 }}
       className="group relative inline-flex items-center gap-3 px-6 py-3.5 rounded-lg overflow-hidden no-underline
         bg-[var(--accent)] text-white
         shadow-[0_0_20px_rgba(108,92,231,0.25),0_4px_16px_rgba(0,0,0,0.3)]
         hover:shadow-[0_0_32px_rgba(108,92,231,0.45),0_8px_32px_rgba(0,0,0,0.4)]
-        transition-shadow duration-300"
+        transition-all duration-300 hover:-translate-y-0.5"
     >
-      {/* Shimmer */}
-      <span className="absolute inset-0 bg-gradient-to-br from-white/15 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
       {/* Download icon */}
       <svg
         className="relative z-10 w-4 h-4 transition-transform duration-300 group-hover:translate-y-0.5"
@@ -88,7 +56,7 @@ function CVButton() {
       <span className="relative z-10 font-[family-name:var(--font-mono)] text-[9px] px-1.5 py-[2px] rounded-[3px] bg-white/15 tracking-[0.1em]">
         PDF
       </span>
-    </motion.a>
+    </a>
   )
 }
 
@@ -130,6 +98,17 @@ export function About() {
                 on Kali Linux.
               </p>
               <p className="text-base text-[var(--text-secondary)] leading-[2]">
+                I also build{" "}
+                <strong className="text-[var(--text-primary)] font-semibold">
+                  full-stack applications
+                </strong>{" "}
+                and enjoy{" "}
+                <strong className="text-[var(--text-primary)] font-semibold">
+                  reverse engineering
+                </strong>{" "}
+                — same curiosity, different layer of the stack.
+              </p>
+              <p className="text-base text-[var(--text-secondary)] leading-[2]">
                 Currently sharpening my skills through competitive CTF play, real infrastructure
                 projects, and working towards professional certifications in offensive security.
               </p>
@@ -159,22 +138,17 @@ export function About() {
           {/* Social links + CV button */}
           <AnimatedSection delay={0.3}>
             <div className="flex flex-wrap gap-2 mb-5">
-              <StaggerContainer className="contents">
-                {socialLinks.map((link) => (
-                  <motion.a
-                    key={link.label}
-                    href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    variants={staggerItem}
-                    whileHover={{ y: -2, scale: 1.02 }}
-                    whileTap={{ scale: 0.97 }}
-                    className="font-[family-name:var(--font-mono)] text-[11px] px-4 py-2 bg-[var(--bg-elevated)] border border-[var(--border-subtle)] rounded-full text-[var(--text-tertiary)] no-underline transition-all duration-300 hover:border-[var(--accent-light)] hover:text-[var(--accent-light)] hover:shadow-[0_4px_16px_rgba(108,92,231,0.15)]"
-                  >
-                    {link.label}
-                  </motion.a>
-                ))}
-              </StaggerContainer>
+              {socialLinks.map((link) => (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-[family-name:var(--font-mono)] text-[11px] px-4 py-2 bg-[var(--bg-elevated)] border border-[var(--border-subtle)] rounded-full text-[var(--text-tertiary)] no-underline transition-all duration-300 hover:border-[var(--accent-light)] hover:text-[var(--accent-light)] hover:shadow-[0_4px_16px_rgba(108,92,231,0.15)] hover:-translate-y-0.5"
+                >
+                  {link.label}
+                </a>
+              ))}
             </div>
 
             {/* CV download row */}

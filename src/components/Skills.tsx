@@ -1,57 +1,11 @@
-"use client"
-
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion"
-import { useRef, useState } from "react"
-import { AnimatedSection, StaggerContainer, staggerItem } from "./AnimatedSection"
+import { AnimatedSection } from "./AnimatedSection"
 import { skills } from "@/lib/data"
 
 function SkillCard({ skill, index }: { skill: (typeof skills)[0]; index: number }) {
-  const cardRef = useRef<HTMLDivElement>(null)
-  const [hovered, setHovered] = useState(false)
-
-  const mouseX = useMotionValue(0)
-  const mouseY = useMotionValue(0)
-  const springX = useSpring(mouseX, { stiffness: 200, damping: 20 })
-  const springY = useSpring(mouseY, { stiffness: 200, damping: 20 })
-  const glowX = useTransform(springX, v => `${v}px`)
-  const glowY = useTransform(springY, v => `${v}px`)
-
-  function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
-    const rect = cardRef.current?.getBoundingClientRect()
-    if (!rect) return
-    mouseX.set(e.clientX - rect.left)
-    mouseY.set(e.clientY - rect.top)
-  }
-
   const paddedIndex = String(index + 1).padStart(2, "0")
 
   return (
-    <motion.div
-      ref={cardRef}
-      variants={staggerItem}
-      onMouseMove={handleMouseMove}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      whileHover={{ y: -6 }}
-      transition={{ type: "spring", stiffness: 300, damping: 24 }}
-      className="group relative bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-xl overflow-hidden cursor-default"
-      style={{
-        boxShadow: hovered
-          ? "0 16px 48px rgba(0,0,0,0.4), 0 0 0 1px rgba(108,92,231,0.15)"
-          : "0 2px 8px rgba(0,0,0,0.15)",
-        transition: "box-shadow 0.4s ease",
-      }}
-    >
-      {/* Mouse-tracked radial glow */}
-      <motion.div
-        className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-        style={{
-          background: hovered
-            ? `radial-gradient(200px circle at ${glowX.get()} ${glowY.get()}, rgba(108,92,231,0.08), transparent 70%)`
-            : "none",
-        }}
-      />
-
+    <div className="group relative bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-xl overflow-hidden cursor-default transition-all duration-300 hover:border-[var(--border-default)] hover:-translate-y-1 hover:shadow-[0_16px_48px_rgba(0,0,0,0.4),0_0_0_1px_rgba(108,92,231,0.15)]">
       {/* Top accent line */}
       <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-[var(--accent-light)] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
@@ -64,7 +18,7 @@ function SkillCard({ skill, index }: { skill: (typeof skills)[0]; index: number 
         {/* Header row */}
         <div className="flex items-start justify-between mb-6">
           {/* Icon */}
-          <div className="w-11 h-11 flex items-center justify-center bg-[var(--accent-subtle)] border border-[rgba(108,92,231,0.18)] rounded-[10px] text-xl text-[var(--accent-light)] group-hover:border-[rgba(108,92,231,0.35)] group-hover:shadow-[0_0_16px_rgba(108,92,231,0.15)] transition-all duration-300">
+          <div className="w-11 h-11 flex items-center justify-center bg-[var(--accent-subtle)] border border-[rgba(108,92,231,0.18)] rounded-[10px] text-xl text-[var(--accent-light)] group-hover:border-[rgba(108,92,231,0.35)] transition-all duration-300">
             {skill.icon}
           </div>
 
@@ -84,25 +38,22 @@ function SkillCard({ skill, index }: { skill: (typeof skills)[0]; index: number 
 
         {/* Tags */}
         <div className="flex flex-wrap gap-1.5">
-          {skill.tags.map((tag, i) => (
-            <motion.span
+          {skill.tags.map((tag) => (
+            <span
               key={tag}
-              initial={false}
-              animate={hovered ? { opacity: 1, y: 0 } : { opacity: 0.7, y: 0 }}
-              transition={{ delay: hovered ? i * 0.03 : 0, duration: 0.2 }}
               className="font-[family-name:var(--font-mono)] text-[10px] px-2.5 py-[5px] rounded-[4px] border transition-all duration-200"
               style={{
-                background: hovered ? "rgba(108,92,231,0.08)" : "var(--bg-elevated)",
-                borderColor: hovered ? "rgba(108,92,231,0.25)" : "var(--border-subtle)",
-                color: hovered ? "var(--accent-light)" : "var(--text-tertiary)",
+                background: "var(--bg-elevated)",
+                borderColor: "var(--border-subtle)",
+                color: "var(--text-tertiary)",
               }}
             >
               {tag}
-            </motion.span>
+            </span>
           ))}
         </div>
       </div>
-    </motion.div>
+    </div>
   )
 }
 
@@ -133,11 +84,11 @@ export function Skills() {
       </AnimatedSection>
 
       {/* Grid */}
-      <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {skills.map((skill, i) => (
           <SkillCard key={skill.title} skill={skill} index={i} />
         ))}
-      </StaggerContainer>
+      </div>
 
       {/* Bottom fade */}
       <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[var(--bg-base)] to-transparent pointer-events-none" />

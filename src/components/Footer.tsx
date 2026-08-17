@@ -1,7 +1,3 @@
-"use client"
-
-import { motion } from "framer-motion"
-
 export function Footer() {
   return (
     <footer className="py-9 px-6 md:px-12 bg-[var(--bg-base)] border-t border-[var(--border-subtle)] flex flex-col md:flex-row items-center justify-between gap-3">

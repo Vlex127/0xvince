@@ -1,8 +1,4 @@
-"use client"
-
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion"
-import { useRef, useState } from "react"
-import { AnimatedSection, StaggerContainer, staggerItem } from "./AnimatedSection"
+import { AnimatedSection } from "./AnimatedSection"
 import { projects } from "@/lib/data"
 
 const STATUS_CONFIG = {
@@ -14,22 +10,7 @@ const STATUS_CONFIG = {
 
 type ProjectStatus = keyof typeof STATUS_CONFIG
 
-function ProjectCard({ project, index }: { project: (typeof projects)[0] & { status?: ProjectStatus; impact?: string; link?: string }, index: number }) {
-  const ref = useRef<HTMLDivElement>(null)
-  const [hovered, setHovered] = useState(false)
-
-  const mouseX = useMotionValue(0)
-  const mouseY = useMotionValue(0)
-  const sx = useSpring(mouseX, { stiffness: 180, damping: 18 })
-  const sy = useSpring(mouseY, { stiffness: 180, damping: 18 })
-
-  function onMouseMove(e: React.MouseEvent<HTMLDivElement>) {
-    const rect = ref.current?.getBoundingClientRect()
-    if (!rect) return
-    mouseX.set(e.clientX - rect.left)
-    mouseY.set(e.clientY - rect.top)
-  }
-
+function ProjectCard({ project }: { project: (typeof projects)[0] & { status?: ProjectStatus; impact?: string; link?: string } }) {
   const statusKey = ((project as any).status ?? "lab") as ProjectStatus
   const cfg = STATUS_CONFIG[statusKey]
   const isWip = statusKey === "wip"
@@ -38,38 +19,13 @@ function ProjectCard({ project, index }: { project: (typeof projects)[0] & { sta
   const screenshot = (project as any).screenshot as string | undefined
 
   return (
-    <motion.div
-      ref={ref}
-      variants={staggerItem}
-      onMouseMove={onMouseMove}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      whileHover={{ y: -8 }}
-      transition={{ type: "spring", stiffness: 280, damping: 22 }}
-      className={`group relative border rounded-xl overflow-hidden flex flex-col transition-all duration-500 ${
+    <div
+      className={`group relative border rounded-xl overflow-hidden flex flex-col transition-all duration-300 hover:-translate-y-1 ${
         isWip
           ? "bg-[var(--bg-surface)]/50 border-dashed border-[var(--border-subtle)]"
-          : "bg-[var(--bg-surface)] border-[var(--border-subtle)] hover:border-[var(--border-strong)]"
+          : "bg-[var(--bg-surface)] border-[var(--border-subtle)] hover:border-[var(--border-strong)] hover:shadow-[0_20px_60px_rgba(0,0,0,0.4),0_0_0_1px_rgba(108,92,231,0.12)]"
       }`}
-      style={{
-        boxShadow: hovered && !isWip
-          ? "0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(108,92,231,0.12)"
-          : "0 2px 8px rgba(0,0,0,0.12)",
-        transition: "box-shadow 0.4s ease, transform 0.3s ease",
-      }}
     >
-      {/* Mouse-tracked glow */}
-      {!isWip && (
-        <motion.div
-          className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"
-          style={{
-            background: hovered
-              ? `radial-gradient(220px circle at ${sx.get()}px ${sy.get()}px, rgba(108,92,231,0.07), transparent 70%)`
-              : "none",
-          }}
-        />
-      )}
-
       {/* Top accent line */}
       <div
         className="absolute top-0 left-0 right-0 h-[2px] scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"
@@ -105,10 +61,7 @@ function ProjectCard({ project, index }: { project: (typeof projects)[0] & { sta
         {/* Header */}
         <div className="flex items-start justify-between mb-5">
           {/* Big number */}
-          <div
-            className="font-[family-name:var(--font-mono)] text-[52px] font-extrabold leading-none tracking-[-3px] transition-colors duration-300 select-none"
-            style={{ color: hovered && !isWip ? cfg.color.replace("1)", "0.18)") : "var(--border-subtle)" }}
-          >
+          <div className="font-[family-name:var(--font-mono)] text-[52px] font-extrabold leading-none tracking-[-3px] text-[var(--border-subtle)] transition-colors duration-300 select-none group-hover:text-[var(--accent-light)]/20">
             {project.num}
           </div>
 
@@ -120,12 +73,6 @@ function ProjectCard({ project, index }: { project: (typeof projects)[0] & { sta
             >
               {cfg.dot && (
                 <span className="relative flex h-1.5 w-1.5">
-                  {statusKey !== "lab" && (
-                    <span
-                      className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-60"
-                      style={{ background: cfg.color }}
-                    />
-                  )}
                   <span className="relative inline-flex rounded-full h-1.5 w-1.5" style={{ background: cfg.color }} />
                 </span>
               )}
@@ -139,14 +86,12 @@ function ProjectCard({ project, index }: { project: (typeof projects)[0] & { sta
           {project.title}
         </h3>
 
-        {/* Animated divider */}
+        {/* Divider */}
         <div
-          className="h-px mb-4 transition-all duration-500"
+          className="h-px mb-4 transition-all duration-500 group-hover:w-[60%]"
           style={{
-            background: hovered
-              ? `linear-gradient(to right, ${cfg.color.replace("1)", "0.4)")}, transparent)`
-              : "var(--border-subtle)",
-            width: hovered ? "60%" : "24px",
+            background: "var(--border-subtle)",
+            width: "24px",
           }}
         />
 
@@ -218,7 +163,7 @@ function ProjectCard({ project, index }: { project: (typeof projects)[0] & { sta
           )}
         </div>
       </div>
-    </motion.div>
+    </div>
   )
 }
 
@@ -256,7 +201,7 @@ export function Projects() {
             <div key={key} className="flex items-center gap-1.5">
               <span
                 className="w-2 h-2 rounded-full"
-                style={{ background: val.color, boxShadow: `0 0 5px ${val.color}` }}
+                style={{ background: val.color }}
               />
               <span className="font-[family-name:var(--font-mono)] text-[10px] text-[var(--text-tertiary)] tracking-[0.12em]">
                 {val.label}
@@ -267,11 +212,11 @@ export function Projects() {
       </AnimatedSection>
 
       {/* Live projects grid */}
-      <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-5">
-        {liveProjects.map((project, i) => (
-          <ProjectCard key={project.num} project={project as any} index={i} />
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-5">
+        {liveProjects.map((project) => (
+          <ProjectCard key={project.num} project={project as any} />
         ))}
-      </StaggerContainer>
+      </div>
 
       {/* WIP projects — dashed row */}
       {wipProjects.length > 0 && (
@@ -285,11 +230,11 @@ export function Projects() {
               <div className="h-px flex-1 border-t border-dashed border-[var(--border-subtle)]" />
             </div>
           </AnimatedSection>
-          <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {wipProjects.map((project, i) => (
-              <ProjectCard key={project.num} project={project as any} index={i} />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {wipProjects.map((project) => (
+              <ProjectCard key={project.num} project={project as any} />
             ))}
-          </StaggerContainer>
+          </div>
         </>
       )}
 
@@ -308,7 +253,7 @@ export function Projects() {
             </a>
           </p>
           <div className="flex items-center gap-2">
-            <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <div className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
             <span className="font-[family-name:var(--font-mono)] text-[10px] text-[var(--text-tertiary)] tracking-[0.12em]">
               actively building
             </span>

@@ -1,9 +1,8 @@
 "use client"
 
-import { motion, useMotionValue, useSpring } from "framer-motion"
-import { useRef, useState } from "react"
-import { AnimatedSection, StaggerContainer, staggerItem } from "./AnimatedSection"
-import { blogPosts } from "@/lib/data"
+import { useState } from "react"
+import { AnimatedSection } from "./AnimatedSection"
+import { blogPosts, getPublishedPosts, getUpcomingPosts, type BlogPost } from "@/lib/blog"
 
 const CATEGORY_COLOR: Record<string, { color: string; bg: string }> = {
   "smtp · infrastructure": { color: "rgba(52,211,153,1)",  bg: "rgba(52,211,153,0.08)"  },
@@ -15,29 +14,36 @@ function getCategory(tag: string) {
   return CATEGORY_COLOR[tag] ?? { color: "rgba(108,92,231,1)", bg: "rgba(108,92,231,0.10)" }
 }
 
+type CardPost = {
+  slug: string
+  tag: string
+  title: string
+  desc: string
+  meta: string
+  readTime: string
+}
+
+function toCard(p: BlogPost): CardPost {
+  const isComingSoon = p.content.includes("Coming Soon")
+  return {
+    slug: isComingSoon ? "" : p.slug,
+    tag: p.tags.join(" · "),
+    title: p.title,
+    desc: p.desc,
+    meta: isComingSoon ? "coming soon" : `published · ${new Date(p.publishedAt).getFullYear()}`,
+    readTime: p.readTime,
+  }
+}
+
 function BlogCard({
   post,
   index,
   featured = false,
 }: {
-  post: (typeof blogPosts)[0] & { readTime?: string; slug?: string }
+  post: CardPost
   index: number
   featured?: boolean
 }) {
-  const ref = useRef<HTMLDivElement>(null)
-  const [hovered, setHovered] = useState(false)
-  const mx = useMotionValue(0)
-  const my = useMotionValue(0)
-  const sx = useSpring(mx, { stiffness: 180, damping: 18 })
-  const sy = useSpring(my, { stiffness: 180, damping: 18 })
-
-  function onMouseMove(e: React.MouseEvent<HTMLDivElement>) {
-    const r = ref.current?.getBoundingClientRect()
-    if (!r) return
-    mx.set(e.clientX - r.left)
-    my.set(e.clientY - r.top)
-  }
-
   const cfg = getCategory(post.tag)
   const padded = String(index + 1).padStart(2, "0")
   const isPublished = !!post.slug && !post.meta.includes("coming soon")
@@ -52,36 +58,11 @@ function BlogCard({
       {...wrapperProps}
       className={`group no-underline block`}
     >
-    <motion.div
-      ref={ref}
-      variants={staggerItem}
-      onMouseMove={onMouseMove}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      whileHover={{ y: -6 }}
-      transition={{ type: "spring", stiffness: 280, damping: 22 }}
-      className={`relative border rounded-xl overflow-hidden flex flex-col cursor-default transition-colors duration-500 ${
-        featured
-          ? "bg-[var(--bg-elevated)] border-[var(--border-default)]"
-          : "bg-[var(--bg-surface)] border-[var(--border-subtle)] hover:border-[var(--border-strong)]"
-      }`}
-      style={{
-        boxShadow: hovered
-          ? `0 20px 56px rgba(0,0,0,0.35), 0 0 0 1px ${cfg.color.replace("1)", "0.15)")}`
-          : "0 2px 8px rgba(0,0,0,0.1)",
-        transition: "box-shadow 0.4s ease",
-      }}
-    >
-      {/* Mouse glow */}
-      <motion.div
-        className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-        style={{
-          background: hovered
-            ? `radial-gradient(200px circle at ${sx.get()}px ${sy.get()}px, ${cfg.color.replace("1)", "0.06)")}, transparent 70%)`
-            : "none",
-        }}
-      />
-
+    <div className={`relative border rounded-xl overflow-hidden flex flex-col cursor-default transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_56px_rgba(0,0,0,0.35)] ${
+      featured
+        ? "bg-[var(--bg-elevated)] border-[var(--border-default)]"
+        : "bg-[var(--bg-surface)] border-[var(--border-subtle)] hover:border-[var(--border-strong)]"
+    }`}>
       {/* Top accent */}
       <div
         className="absolute top-0 left-0 right-0 h-[2px] scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"
@@ -121,14 +102,12 @@ function BlogCard({
           {post.title}
         </h3>
 
-        {/* Animated divider */}
+        {/* Divider */}
         <div
-          className="h-px mb-4 transition-all duration-500"
+          className="h-px mb-4 transition-all duration-500 group-hover:w-[55%]"
           style={{
-            background: hovered
-              ? `linear-gradient(to right, ${cfg.color.replace("1)", "0.35)")}, transparent)`
-              : "var(--border-subtle)",
-            width: hovered ? "55%" : "20px",
+            background: "var(--border-subtle)",
+            width: "20px",
           }}
         />
 
@@ -159,13 +138,34 @@ function BlogCard({
           </div>
         </div>
       </div>
-    </motion.div>
+    </div>
     </Wrapper>
   )
 }
 
 export function Blog() {
-  const [featured, ...rest] = blogPosts
+  const published = getPublishedPosts()
+  const upcoming = getUpcomingPosts()
+  const featured = toCard(published[0])
+  const rest = [...published.slice(1).map(toCard), ...upcoming.map(toCard)]
+  const [email, setEmail] = useState("")
+  const [subscribeState, setSubscribeState] = useState<"idle" | "sending" | "done" | "error">("idle")
+
+  async function handleSubscribe(e: React.FormEvent) {
+    e.preventDefault()
+    if (!email) return
+    setSubscribeState("sending")
+    try {
+      const res = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      })
+      setSubscribeState(res.ok ? "done" : "error")
+    } catch {
+      setSubscribeState("error")
+    }
+  }
 
   return (
     <section id="blog" className="py-[120px] px-6 md:px-12 bg-[var(--bg-base)] relative overflow-hidden">
@@ -176,7 +176,7 @@ export function Blog() {
       <AnimatedSection>
         <p className="font-[family-name:var(--font-mono)] text-[11px] text-[var(--accent-light)] tracking-[0.25em] lowercase mb-5 flex items-center gap-3">
           <span className="text-[var(--text-tertiary)]">//</span> blog
-          <span className="text-[var(--text-tertiary)]/40">— {blogPosts.length} posts · 1 published</span>
+          <span className="text-[var(--text-tertiary)]/40">— {blogPosts.length} posts · {published.length} published</span>
         </p>
       </AnimatedSection>
 
@@ -204,17 +204,17 @@ export function Blog() {
 
       {/* ── FEATURED POST (full width) ── */}
       <AnimatedSection delay={0.2}>
-        <StaggerContainer className="mb-5">
-          <BlogCard post={featured as any} index={0} featured />
-        </StaggerContainer>
+        <div className="mb-5">
+          <BlogCard post={featured} index={0} featured />
+        </div>
       </AnimatedSection>
 
       {/* ── REST OF POSTS ── */}
-      <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-16">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-16">
         {rest.map((post, i) => (
-          <BlogCard key={post.title} post={post as any} index={i + 1} />
+          <BlogCard key={post.title} post={post} index={i + 1} />
         ))}
-      </StaggerContainer>
+      </div>
 
       {/* ── NEWSLETTER / NOTIFY CTA ── */}
       <AnimatedSection delay={0.2}>
@@ -235,25 +235,41 @@ export function Blog() {
               </p>
             </div>
 
-            <div className="flex flex-col gap-3 w-full md:w-auto">
-              <div className="flex gap-2">
-                <input
-                  type="email"
-                  placeholder="your@email.com"
-                  className="flex-1 md:w-[220px] font-[family-name:var(--font-mono)] text-[12px] px-4 py-3 bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-lg text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)] focus:outline-none focus:border-[var(--accent-light)] transition-colors duration-200"
-                />
-                <motion.button
-                  whileHover={{ y: -1 }}
-                  whileTap={{ scale: 0.97 }}
-                  className="font-[family-name:var(--font-mono)] text-[11px] px-5 py-3 bg-[var(--accent)] text-white rounded-lg tracking-[0.08em] hover:shadow-[0_0_24px_rgba(108,92,231,0.35)] transition-shadow duration-300 whitespace-nowrap"
-                >
-                  notify me →
-                </motion.button>
-              </div>
-              <p className="font-[family-name:var(--font-mono)] text-[9px] text-[var(--text-tertiary)] tracking-[0.1em]">
-                no spam · unsubscribe anytime · built with Postfix 😄
+            {subscribeState === "done" ? (
+              <p className="font-[family-name:var(--font-mono)] text-[12px] text-emerald-400 tracking-[0.1em]">
+                you&apos;re on the list →
               </p>
-            </div>
+            ) : (
+              <form onSubmit={handleSubscribe} className="flex flex-col gap-3 w-full md:w-auto">
+                <div className="flex gap-2">
+                  <input
+                    type="email"
+                    required
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    placeholder="your@email.com"
+                    aria-label="email for blog updates"
+                    className="flex-1 md:w-[220px] font-[family-name:var(--font-mono)] text-[12px] px-4 py-3 bg-[var(--bg-elevated)] border border-[var(--border-default)] rounded-lg text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)] focus:outline-none focus:border-[var(--accent-light)] transition-colors duration-200"
+                  />
+                  <button
+                    type="submit"
+                    disabled={subscribeState === "sending"}
+                    className="font-[family-name:var(--font-mono)] text-[11px] px-5 py-3 bg-[var(--accent)] text-white rounded-lg tracking-[0.08em] hover:shadow-[0_0_24px_rgba(108,92,231,0.35)] transition-shadow duration-300 whitespace-nowrap disabled:opacity-60 disabled:cursor-not-allowed"
+                  >
+                    {subscribeState === "sending" ? "adding…" : "notify me →"}
+                  </button>
+                </div>
+                {subscribeState === "error" ? (
+                  <p className="font-[family-name:var(--font-mono)] text-[9px] text-red-400 tracking-[0.1em]">
+                    something went wrong — try again
+                  </p>
+                ) : (
+                  <p className="font-[family-name:var(--font-mono)] text-[9px] text-[var(--text-tertiary)] tracking-[0.1em]">
+                    no spam · unsubscribe anytime
+                  </p>
+                )}
+              </form>
+            )}
           </div>
         </div>
       </AnimatedSection>
@@ -281,11 +297,10 @@ export function Blog() {
           </p>
           <div className="flex items-center gap-2">
             <span className="relative flex h-1.5 w-1.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60" />
               <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-400" />
             </span>
             <span className="font-[family-name:var(--font-mono)] text-[10px] text-[var(--text-tertiary)] tracking-[0.12em]">
-              1 post published
+              {published.length} post{published.length === 1 ? "" : "s"} published
             </span>
           </div>
         </div>
