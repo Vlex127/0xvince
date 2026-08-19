@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { AnimatedSection } from "./AnimatedSection"
 import { contactLinks } from "@/lib/data"
-
+import { TerminalWindow } from "./TerminalWindow"
 const SUBJECTS = [
   "security consultation",
   "penetration testing inquiry",
@@ -116,19 +116,13 @@ export function Contact() {
 
           {/* Terminal block */}
           <AnimatedSection delay={0.3}>
-            <div className="mb-10 bg-[var(--bg-elevated)] border border-[var(--border-subtle)] rounded-xl p-5 font-[family-name:var(--font-mono)] text-[11px]">
-              <div className="flex items-center gap-1.5 mb-4">
-                <div className="w-2.5 h-2.5 rounded-full bg-red-500/70" />
-                <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/70" />
-                <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/70" />
-                <span className="ml-2 text-[10px] text-[var(--text-tertiary)] tracking-[0.1em]">preferred contact</span>
-              </div>
-              <div className="space-y-1.5 text-[var(--text-tertiary)]">
+            <div className="mb-10">
+              <TerminalWindow label="preferred contact">
                 <p><span className="text-[var(--accent-light)]">$</span> <span className="text-[var(--text-secondary)]">ping</span> 0xvince@vincentiwuno.me</p>
                 <p className="pl-2">→ response time: <span className="text-emerald-400">&lt; 24h</span></p>
                 <p className="mt-2"><span className="text-[var(--accent-light)]">$</span> <span className="text-[var(--text-secondary)]">best for</span></p>
                 <p className="pl-2">→ security consulting · collaborations · opportunities</p>
-              </div>
+              </TerminalWindow>
             </div>
           </AnimatedSection>
 
@@ -139,40 +133,27 @@ export function Contact() {
             </p>
             <div className="flex flex-col gap-2">
               {contactLinks.map((link) => {
-                const cfg = LINK_COLORS[link.id] ?? { color: "rgba(108,92,231,1)", bg: "rgba(108,92,231,0.1)" }
-                return (
-                  <a
-                    key={link.id}
-                    href={link.href}
-                    target={link.href.startsWith("http") ? "_blank" : undefined}
-                    rel="noopener noreferrer"
-                    className="group flex items-center gap-3.5 font-[family-name:var(--font-mono)] text-[12px] text-[var(--text-tertiary)] no-underline px-3.5 py-2.5 rounded-lg transition-all duration-300 hover:translate-x-1"
-                    style={{
-                      background: "transparent",
-                    }}
-                    onMouseEnter={e => {
-                      (e.currentTarget as HTMLElement).style.background = cfg.bg
-                      ;(e.currentTarget as HTMLElement).style.color = cfg.color
-                    }}
-                    onMouseLeave={e => {
-                      ;(e.currentTarget as HTMLElement).style.background = "transparent"
-                      ;(e.currentTarget as HTMLElement).style.color = ""
-                    }}
-                  >
-                    <div
-                      className="w-9 h-9 flex items-center justify-center rounded-lg border border-[var(--border-subtle)] text-sm flex-shrink-0 transition-all duration-300 group-hover:border-current"
-                      style={{ background: "var(--bg-elevated)" }}
+                  const cfg = LINK_COLORS[link.id] ?? { color: "rgba(108,92,231,1)", bg: "rgba(108,92,231,0.1)" }
+                  return (
+                    <a
+                      key={link.id}
+                      href={link.href}
+                      target={link.href.startsWith("http") ? "_blank" : undefined}
+                      rel="noopener noreferrer"
+                      className="group flex items-center gap-3.5 font-[family-name:var(--font-mono)] text-[12px] text-[var(--text-tertiary)] no-underline px-3.5 py-2.5 rounded-lg transition-all duration-300 hover:translate-x-1"
+                      style={{ "--hover-bg": cfg.bg, "--hover-color": cfg.color } as React.CSSProperties}
                     >
-                      <link.icon size={18} />
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="text-[11px] opacity-50 capitalize">{link.id}</span>
-                      <span className="text-[12px]">{link.label}</span>
-                    </div>
-                    <span className="ml-auto text-[10px] opacity-0 group-hover:opacity-60 transition-opacity duration-200">↗</span>
-                  </a>
-                )
-              })}
+                      <div className="w-9 h-9 flex items-center justify-center rounded-lg border border-[var(--border-subtle)] text-sm flex-shrink-0 bg-[var(--bg-elevated)] transition-all duration-300 group-hover:border-current group-hover:bg-[var(--hover-bg)] group-hover:text-[var(--hover-color)]">
+                        <link.icon size={18} />
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-[11px] opacity-50 capitalize">{link.id}</span>
+                        <span className="text-[12px]">{link.label}</span>
+                      </div>
+                      <span className="ml-auto text-[10px] opacity-0 group-hover:opacity-60 transition-opacity duration-200">↗</span>
+                    </a>
+                  )
+               })}
             </div>
           </AnimatedSection>
         </div>

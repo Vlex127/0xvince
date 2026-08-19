@@ -1,22 +1,18 @@
 import { AnimatedSection } from "./AnimatedSection"
-import { projects } from "@/lib/data"
+import { Badge } from "./Badge"
+import { projects, type Project } from "@/lib/data"
 
 const STATUS_CONFIG = {
-  live:   { label: "Live",    color: "rgba(52,211,153,1)",  bg: "rgba(52,211,153,0.10)",  dot: true  },
-  active: { label: "Active",  color: "rgba(108,92,231,1)",  bg: "rgba(108,92,231,0.12)",  dot: true  },
-  lab:    { label: "Lab",     color: "rgba(251,191,36,1)",  bg: "rgba(251,191,36,0.10)",  dot: false },
-  wip:    { label: "In Progress", color: "rgba(96,165,250,1)", bg: "rgba(96,165,250,0.10)", dot: true },
+  live:   { label: "Live",        color: "rgba(52,211,153,1)",  bg: "rgba(52,211,153,0.10)", border: "rgba(52,211,153,0.20)", dot: true  },
+  active: { label: "Active",      color: "rgba(108,92,231,1)",  bg: "rgba(108,92,231,0.12)", border: "rgba(108,92,231,0.22)", dot: true  },
+  lab:    { label: "Lab",         color: "rgba(251,191,36,1)",  bg: "rgba(251,191,36,0.10)", border: "rgba(251,191,36,0.20)", dot: false },
+  wip:    { label: "In Progress", color: "rgba(96,165,250,1)",  bg: "rgba(96,165,250,0.10)", border: "rgba(96,165,250,0.20)", dot: true  },
 } as const
 
-type ProjectStatus = keyof typeof STATUS_CONFIG
-
-function ProjectCard({ project }: { project: (typeof projects)[0] & { status?: ProjectStatus; impact?: string; link?: string } }) {
-  const statusKey = ((project as any).status ?? "lab") as ProjectStatus
-  const cfg = STATUS_CONFIG[statusKey]
-  const isWip = statusKey === "wip"
-  const link = (project as any).link as string | undefined
-  const impact = (project as any).impact as string | undefined
-  const screenshot = (project as any).screenshot as string | undefined
+function ProjectCard({ project }: { project: Project }) {
+  const cfg = STATUS_CONFIG[project.status]
+  const isWip = project.status === "wip"
+  const { link, impact, screenshot } = project
 
   return (
     <div
@@ -67,17 +63,9 @@ function ProjectCard({ project }: { project: (typeof projects)[0] & { status?: P
 
           {/* Status badge */}
           <div className="flex flex-col items-end gap-1.5 mt-1">
-            <span
-              className="inline-flex items-center gap-1.5 font-[family-name:var(--font-mono)] text-[9px] px-2 py-[3px] rounded-[3px] tracking-[0.14em] uppercase font-medium"
-              style={{ color: cfg.color, background: cfg.bg }}
-            >
-              {cfg.dot && (
-                <span className="relative flex h-1.5 w-1.5">
-                  <span className="relative inline-flex rounded-full h-1.5 w-1.5" style={{ background: cfg.color }} />
-                </span>
-              )}
+            <Badge color={cfg.color} bg={cfg.bg} dot={cfg.dot}>
               {cfg.label}
-            </span>
+            </Badge>
           </div>
         </div>
 
@@ -106,7 +94,7 @@ function ProjectCard({ project }: { project: (typeof projects)[0] & { status?: P
             className="flex items-start gap-2 rounded-lg px-3 py-2.5 mb-5 border"
             style={{
               background: cfg.bg,
-              borderColor: cfg.color.replace("1)", "0.2)"),
+              borderColor: cfg.border,
             }}
           >
             <span className="text-[10px] mt-[1px] shrink-0" style={{ color: cfg.color }}>▶</span>
@@ -168,8 +156,8 @@ function ProjectCard({ project }: { project: (typeof projects)[0] & { status?: P
 }
 
 export function Projects() {
-  const liveProjects = projects.filter(p => (p as any).status !== "wip")
-  const wipProjects  = projects.filter(p => (p as any).status === "wip")
+  const liveProjects = projects.filter(p => p.status !== "wip")
+  const wipProjects  = projects.filter(p => p.status === "wip")
 
   return (
     <section id="projects" className="py-[120px] px-6 md:px-12 bg-[var(--bg-base)] relative overflow-hidden">
@@ -214,7 +202,7 @@ export function Projects() {
       {/* Live projects grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-5">
         {liveProjects.map((project) => (
-          <ProjectCard key={project.num} project={project as any} />
+          <ProjectCard key={project.num} project={project} />
         ))}
       </div>
 
@@ -232,7 +220,7 @@ export function Projects() {
           </AnimatedSection>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {wipProjects.map((project) => (
-              <ProjectCard key={project.num} project={project as any} />
+              <ProjectCard key={project.num} project={project} />
             ))}
           </div>
         </>

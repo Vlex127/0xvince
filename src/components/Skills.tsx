@@ -1,9 +1,7 @@
 import { AnimatedSection } from "./AnimatedSection"
-import { skills } from "@/lib/data"
+import { skills, type Skill } from "@/lib/data"
 
-function SkillCard({ skill, index }: { skill: (typeof skills)[0]; index: number }) {
-  const paddedIndex = String(index + 1).padStart(2, "0")
-
+function SkillCard({ skill }: { skill: Skill }) {
   return (
     <div className="group relative bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-xl overflow-hidden cursor-default transition-all duration-300 hover:border-[var(--border-default)] hover:-translate-y-1 hover:shadow-[0_16px_48px_rgba(0,0,0,0.4),0_0_0_1px_rgba(108,92,231,0.15)]">
       {/* Top accent line */}
@@ -21,11 +19,6 @@ function SkillCard({ skill, index }: { skill: (typeof skills)[0]; index: number 
           <div className="w-11 h-11 flex items-center justify-center bg-[var(--accent-subtle)] border border-[rgba(108,92,231,0.18)] rounded-[10px] text-xl text-[var(--accent-light)] group-hover:border-[rgba(108,92,231,0.35)] transition-all duration-300">
             {skill.icon}
           </div>
-
-          {/* Index */}
-          <span className="font-[family-name:var(--font-mono)] text-[10px] text-[var(--text-tertiary)]/40 group-hover:text-[var(--accent-light)]/40 transition-colors duration-300 tracking-[0.1em]">
-            {paddedIndex}
-          </span>
         </div>
 
         {/* Title */}
@@ -85,8 +78,8 @@ export function Skills() {
 
       {/* Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {skills.map((skill, i) => (
-          <SkillCard key={skill.title} skill={skill} index={i} />
+        {skills.map((skill) => (
+          <SkillCard key={skill.title} skill={skill} />
         ))}
       </div>
 

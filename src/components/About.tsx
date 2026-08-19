@@ -81,36 +81,24 @@ export function About() {
           <AnimatedSection delay={0.2}>
             <div className="space-y-5 mb-10">
               <p className="text-base text-[var(--text-secondary)] leading-[2]">
-                I&apos;m{" "}
-                <strong className="text-[var(--text-primary)] font-semibold">
-                  Vincent Iwuno
-                </strong>
-                , a cybersecurity researcher and ethical hacker based in Nigeria. I&apos;m
-                passionate about understanding how systems work — and how they break.
+                I&apos;m Vincent Iwuno — I go by 0xVince online. Based in Nigeria, currently
+                a CS student, but most of what I actually know I picked up outside class:
+                breaking things on purpose, then figuring out why they broke.
               </p>
               <p className="text-base text-[var(--text-secondary)] leading-[2]">
-                I specialize in{" "}
-                <strong className="text-[var(--text-primary)] font-semibold">
-                  penetration testing
-                </strong>
-                , network security, and security awareness. When I&apos;m not doing CTFs,
-                I&apos;m building tools, writing about security, or setting up infrastructure
-                on Kali Linux.
+                Security is where most of my free time goes right now — pentesting, network
+                stuff, setting up infrastructure the hard way on Kali instead of just reading
+                about it. I&apos;d rather spend a weekend debugging DNS records than watch
+                another tutorial.
               </p>
               <p className="text-base text-[var(--text-secondary)] leading-[2]">
-                I also build{" "}
-                <strong className="text-[var(--text-primary)] font-semibold">
-                  full-stack applications
-                </strong>{" "}
-                and enjoy{" "}
-                <strong className="text-[var(--text-primary)] font-semibold">
-                  reverse engineering
-                </strong>{" "}
-                — same curiosity, different layer of the stack.
+                I also build full-stack apps — that&apos;s actually where I started, before
+                security pulled me in. Reverse engineering scratches the same itch: take it
+                apart, see what&apos;s actually happening under the abstraction.
               </p>
               <p className="text-base text-[var(--text-secondary)] leading-[2]">
-                Currently sharpening my skills through competitive CTF play, real infrastructure
-                projects, and working towards professional certifications in offensive security.
+                Right now I&apos;m grinding CTFs, building real (not toy) infrastructure
+                projects, and working toward some offensive security certs.
               </p>
             </div>
           </AnimatedSection>

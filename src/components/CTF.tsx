@@ -1,5 +1,5 @@
 import { AnimatedSection } from "./AnimatedSection"
-
+import { TerminalWindow } from "./TerminalWindow"
 const platforms = [
   {
     name: "TryHackMe",
@@ -92,7 +92,7 @@ function PlatformCard({ p }: { p: typeof platforms[0] }) {
             className="w-10 h-10 rounded-lg flex items-center justify-center text-lg border transition-all duration-300"
             style={{
               background: p.bg,
-              borderColor: p.color.replace("1)", "0.2)"),
+              borderColor: p.bg,
             }}
           >
             {p.icon}
@@ -186,31 +186,22 @@ export function CTF() {
 
       {/* Terminal intro */}
       <AnimatedSection delay={0.15}>
-        <div className="mb-14 bg-[var(--bg-elevated)] border border-[var(--border-subtle)] rounded-xl p-5 font-[family-name:var(--font-mono)] text-[12px] max-w-[600px]">
-          <div className="flex items-center gap-1.5 mb-4">
-            <div className="w-2.5 h-2.5 rounded-full bg-red-500/70" />
-            <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/70" />
-            <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/70" />
-            <span className="ml-2 text-[10px] text-[var(--text-tertiary)] tracking-[0.1em]">0xvince ~ terminal</span>
-          </div>
-          <div className="space-y-1.5 text-[var(--text-tertiary)]">
+        <div className="mb-14 max-w-[600px]">
+          <TerminalWindow label="0xvince ~ terminal">
             <p><span className="text-[var(--accent-light)]">$</span> <span className="text-[var(--text-secondary)]">whoami</span></p>
-            <p className="pl-2 text-[var(--text-tertiary)]">→ security researcher · ctf player · offensive security student</p>
+            <p className="pl-2">→ security researcher · ctf player · offensive security student</p>
             <p className="mt-2"><span className="text-[var(--accent-light)]">$</span> <span className="text-[var(--text-secondary)]">cat philosophy.txt</span></p>
-            <p className="pl-2 text-[var(--text-tertiary)] leading-[1.7]">
-              → I don&apos;t just read about vulnerabilities — I reproduce them,
-              <br />
-              &nbsp;&nbsp; document how they work, and understand why defences fail.
+            <p className="pl-2 leading-[1.7]">
+              → I don&apos;t just read about vulnerabilities — I reproduce them, document how they work, and understand why defences fail.
             </p>
             <p className="mt-2"><span className="text-[var(--accent-light)]">$</span> <span className="text-emerald-400">status</span></p>
             <p className="pl-2 flex items-center gap-2">
-              <span className="relative flex h-1.5 w-1.5">
-                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-400" />
-              </span>
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
               <span className="text-emerald-400">actively solving · writeups incoming</span>
             </p>
-          </div>
-        </div>
+          </TerminalWindow>
+       </div>
+        
       </AnimatedSection>
 
       {/* ── PLATFORM CARDS ── */}

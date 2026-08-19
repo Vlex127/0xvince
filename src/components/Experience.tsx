@@ -2,7 +2,8 @@
 
 import { useState } from "react"
 import { AnimatedSection } from "./AnimatedSection"
-import { experience } from "@/lib/data"
+import { Badge } from "./Badge"
+import { experience, type ExperienceItem } from "@/lib/data"
 
 const TYPE_CONFIG = {
   work:      { label: "Work",      color: "rgba(108,92,231,1)",  bg: "rgba(108,92,231,0.12)" },
@@ -11,23 +12,12 @@ const TYPE_CONFIG = {
   education: { label: "Education", color: "rgba(96,165,250,1)",  bg: "rgba(96,165,250,0.10)" },
 } as const
 
-function ExperienceCard({
-  exp,
-  index,
-}: {
-  exp: (typeof experience)[0] & {
-    type?: keyof typeof TYPE_CONFIG
-    status?: "current" | "completed"
-    highlights?: string[]
-    skills?: string[]
-    link?: string
-  }
-  index: number
-}) {
+function ExperienceCard({ exp, index }: { exp: ExperienceItem; index: number }) {
   const [expanded, setExpanded] = useState(index === 0)
-  const typeKey = (exp as any).type ?? "work"
-  const cfg = TYPE_CONFIG[typeKey as keyof typeof TYPE_CONFIG]
-  const isCurrent = (exp as any).status === "current"
+  const cfg = TYPE_CONFIG[exp.type]
+  const isCurrent = exp.status === "current"
+  const highlights = exp.highlights ?? []
+  const skills = exp.skills ?? []
 
   return (
     <div className="relative group">
@@ -68,20 +58,14 @@ function ExperienceCard({
             </span>
             <div className="flex items-center gap-2">
               {/* Type badge */}
-              <span
-                className="font-[family-name:var(--font-mono)] text-[9px] px-2 py-[3px] rounded-[3px] tracking-[0.12em] uppercase font-medium"
-                style={{ color: cfg.color, background: cfg.bg }}
-              >
+              <Badge color={cfg.color} bg={cfg.bg}>
                 {cfg.label}
-              </span>
+              </Badge>
               {/* Status badge */}
               {isCurrent && (
-                <span className="inline-flex items-center gap-1.5 font-[family-name:var(--font-mono)] text-[9px] px-2 py-[3px] rounded-[3px] bg-emerald-500/10 text-emerald-400 tracking-[0.12em] uppercase">
-                  <span className="relative flex h-1.5 w-1.5">
-                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-400" />
-                  </span>
+                <Badge color="rgba(52,211,153,1)" bg="rgba(52,211,153,0.10)" dot>
                   current
-                </span>
+                </Badge>
               )}
               {/* Expand toggle */}
               <span
@@ -100,9 +84,9 @@ function ExperienceCard({
             <span className="font-[family-name:var(--font-mono)] text-[11px] text-[var(--text-tertiary)]">
               {exp.org}
             </span>
-            {(exp as any).link && (
+            {exp.link && (
               <a
-                href={(exp as any).link}
+                href={exp.link}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={e => e.stopPropagation()}
@@ -122,13 +106,13 @@ function ExperienceCard({
           {expanded && (
             <div className="border-t border-[var(--border-subtle)] pt-4">
               {/* Highlights */}
-              {(exp as any).highlights?.length > 0 && (
+              {highlights.length > 0 && (
                 <div className="mb-4">
                   <p className="font-[family-name:var(--font-mono)] text-[9px] text-[var(--text-tertiary)] tracking-[0.2em] uppercase mb-3">
                     key highlights
                   </p>
                   <ul className="space-y-2">
-                    {(exp as any).highlights.map((h: string, i: number) => (
+                    {highlights.map((h, i) => (
                       <li
                         key={i}
                         className="flex items-start gap-2.5 text-[12px] text-[var(--text-secondary)] leading-[1.7]"
@@ -142,9 +126,9 @@ function ExperienceCard({
               )}
 
               {/* Skill tags */}
-              {(exp as any).skills?.length > 0 && (
+              {skills.length > 0 && (
                 <div className="flex flex-wrap gap-1.5 pt-2">
-                  {(exp as any).skills.map((s: string) => (
+                  {skills.map((s) => (
                     <span
                       key={s}
                       className="font-[family-name:var(--font-mono)] text-[9px] px-2 py-[4px] rounded-[3px] border border-[var(--border-subtle)] text-[var(--text-tertiary)] bg-[var(--bg-surface)]"
@@ -215,8 +199,8 @@ export function Experience() {
         <div className="space-y-6">
           {experience.map((exp, i) => (
             <ExperienceCard
-              key={(exp as any).date ?? i}
-              exp={exp as any}
+              key={exp.date}
+              exp={exp}
               index={i}
             />
           ))}

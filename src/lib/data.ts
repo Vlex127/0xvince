@@ -17,7 +17,13 @@ export const navLinks = [
 // ─────────────────────────────────────────
 // SKILLS
 // ─────────────────────────────────────────
-export const skills = [
+export type Skill = {
+  icon: string
+  title: string
+  desc: string
+  tags: string[]
+}
+export const skills: Skill[] = [
   {
     icon: "⚔️",
     title: "Offensive Security",
@@ -71,21 +77,31 @@ export const skills = [
 // ─────────────────────────────────────────
 // EXPERIENCE
 // ─────────────────────────────────────────
-export const experience = [
+export type ExperienceItem = {
+  date: string
+  title: string
+  org: string
+  type: "research" | "ctf" | "education" | "work"
+  status: "current" | "completed"
+  desc: string
+  highlights?: string[]
+  skills?: string[]
+  link?: string
+}
+export const experience: ExperienceItem[] = [
   {
     date: "2026 — present",
     title: "Independent Security Researcher",
     org: "Self-employed",
     type: "research",
     status: "current",
-    desc: "Independently researching offensive security techniques and building real-world infrastructure to test attack and defence scenarios. Focus areas include email security, phishing simulation, and network-layer exploitation.",
+    desc: "Building out real infra to actually test attack/defence stuff instead of just reading about it. Mail security and phishing sims mostly right now.",
     highlights: [
-      "Architected a production-grade SMTP mail server using Postfix + Brevo with full SPF, DKIM, and DMARC authentication on a custom domain",
-      "Deployed and operated GoPhish phishing simulation labs — designed realistic lure templates and tracked campaign metrics to study human attack vectors",
-      "Built a Python + Nmap recon automation pipeline that auto-emails formatted scan reports to a custom domain inbox on completion",
-      "Actively documenting research as technical blog posts to contribute back to the security community",
+      "Got a real SMTP server running with Postfix + Brevo — SPF/DKIM/DMARC took way longer than I expected, kept landing in spam until I actually understood how domain verification works",
+      "Ran GoPhish campaigns against myself basically, to see what makes people click",
+      "Wrote a script that runs Nmap and emails me the report so I stop manually copy-pasting scan output",
     ],
-    skills: ["Postfix", "GoPhish", "Python", "Nmap", "DNS", "Kali Linux", "SMTP", "DKIM/SPF/DMARC", "MCP", "Docker"],
+    skills: ["Postfix", "GoPhish", "Python", "Nmap", "DNS", "Kali Linux", "SMTP", "DKIM/SPF/DMARC"],
     link: "https://vincentiwuno.me",
   },
   {
@@ -94,13 +110,13 @@ export const experience = [
     org: "Open-source · Vlex127/secureops-mcp",
     type: "research",
     status: "current",
-    desc: "Built a local security auditing server that uses the Model Context Protocol to let LLMs run security scans without source code ever leaving the machine. Implements 14 security rules with 39 regex patterns, Python AST analysis for dangerous calls (eval, exec, pickle, os.system), .env file parsing, SARIF output, and path traversal protection on all file reads.",
+    desc: "Local security auditing server using MCP so an LLM can scan your codebase without your source code ever leaving the machine. Probably the most over-engineered thing on this page, honestly.",
     highlights: [
-      "Designed and implemented a multi-analyzer architecture: RegexScanner, ASTAnalyzer, FileScanner, and DepScanner — each handling a different class of vulnerability",
-      "Built 5 MCP tools (run_local_security_audit, get_audit_summary, scan_directory_structure, read_file_securely, run_local_security_audit_sarif) with structured JSON responses",
-      "Added .env file scanning with specialized KEY=VALUE parsing that catches unquoted secrets — a common blind spot in standard regex scanners",
-      "Produced SARIF v2.1.0 output compatible with GitHub Advanced Security and VS Code SARIF Viewer for inline PR annotations",
-      "Created an interactive HTML dashboard for visualizing audit results with severity donut charts, risk score gauges, and searchable findings tables",
+      "Multi-analyzer setup — RegexScanner, ASTAnalyzer, FileScanner, DepScanner — each one catching a different class of bug. The AST analyzer was the hard part: flagging eval/exec/pickle calls without nuking the whole file",
+      "5 MCP tools, from run_local_security_audit to the SARIF one, all returning structured JSON. Felt very official writing an actual spec for tool responses",
+      ".env scanning that catches unquoted secrets — my first version missed those, and that annoyed me enough to fix it properly",
+      "SARIF v2.1.0 output that GitHub Advanced Security and VS Code's SARIF viewer both accept — sat in the docs for hours getting that schema right",
+      "HTML dashboard for results: severity donut charts, risk gauges, searchable findings. Overkill, but fun",
     ],
     skills: ["Python", "MCP", "AST", "Regex", "SARIF", "Docker", "Security Auditing", "LLM Integration"],
     link: "https://github.com/Vlex127/secureops-mcp",
@@ -111,12 +127,12 @@ export const experience = [
     org: "TryHackMe · HackTheBox",
     type: "ctf",
     status: "completed",
-    desc: "Immersed in competitive Capture the Flag events spanning web exploitation, privilege escalation, network forensics, binary analysis, and cryptography. Treated every challenge as a real-world attack scenario.",
+    desc: "The grind year. TryHackMe and HackTheBox almost every night — web exploitation, privilege escalation, forensics, crypto, and binary stuff I still mostly hate. Every box was a real-world scenario, just with a flag at the end.",
     highlights: [
-      "Solved challenges across 5+ categories: web, pwn, forensics, crypto, and OSINT",
-      "Completed structured learning paths on TryHackMe covering networking, Linux, and ethical hacking fundamentals",
-      "Documented and published writeups — building a personal knowledge base of attack techniques and mitigations",
-      "Consistently progressed to harder difficulty tiers on HackTheBox through methodical enumeration and exploitation",
+      "Worked challenges across 5+ categories — web, pwn, forensics, crypto, OSINT. Some took a day, some took a week",
+      "Finished the structured TryHackMe paths: networking, Linux, and ethical hacking fundamentals — the boring-but-necessary part",
+      "Started publishing writeups so I actually remember what I learned. Explaining it to nobody on the internet is the fastest way to find the gaps",
+      "Slowly climbed from easy boxes to the harder HackTheBox tiers. Each one still humbles me",
     ],
     skills: ["Burp Suite", "GDB", "Wireshark", "CyberChef", "SQLmap", "John the Ripper", "Gobuster"],
   },
@@ -126,12 +142,12 @@ export const experience = [
     org: "Self-directed · Kali Linux Lab",
     type: "education",
     status: "completed",
-    desc: "Dedicated a full year to building the technical foundation of a security career — not through courses alone, but through hands-on lab work, building broken things intentionally, and understanding why they break.",
+    desc: "A full year spent learning security the hands-on way — no bootcamp, just a Kali box, a lot of intentional breakage, and the patience to figure out why things broke. This is the year everything else on this page builds on.",
     highlights: [
-      "Mastered TCP/IP, DNS, HTTP, and core networking protocols through packet-level analysis with Wireshark",
-      "Set up and administered a personal Kali Linux lab environment for safe exploitation practice",
-      "Learned Python scripting with a focus on security tooling: port scanners, brute-force scripts, and log parsers",
-      "Studied the OWASP Top 10 in depth — reproducing each vulnerability class in controlled web environments",
+      "Got comfortable with TCP/IP, DNS, and HTTP at the packet level — Wireshark was open more than my browser that year",
+      "Set up and re-broke my own Kali lab constantly, which forced me to actually fix what I broke",
+      "Learned Python by writing the boring tooling — port scanners, brute-force scripts, log parsers",
+      "Walked through the OWASP Top 10 by reproducing each one in a controlled environment instead of just reading about it",
     ],
     skills: ["Networking", "Linux CLI", "Python", "Wireshark", "OWASP", "VirtualBox", "HTTP/DNS"],
   },
@@ -140,12 +156,22 @@ export const experience = [
 // ─────────────────────────────────────────
 // PROJECTS
 // ─────────────────────────────────────────
-export const projects = [
+export type Project = {
+  num: string
+  title: string
+  desc: string
+  stack: string[]
+  status: "live" | "active" | "lab" | "wip"
+  impact?: string
+  link?: string
+  screenshot?: string
+}
+export const projects: Project[] = [
   {
     num: "01",
     title: "Custom SMTP Mail Server",
-    desc: "Deployed a full production-grade mail server on Kali Linux using Postfix and Brevo as the relay provider. Configured SPF, DKIM, and DMARC records on a custom domain (vincentiwuno.me) — the same authentication stack used by enterprise mail systems to prevent spoofing.",
-    impact: "Fully authenticated outbound email with 0 spam-folder delivery on major providers.",
+    desc: "A mail server that actually delivers. Postfix + Brevo on Kali, with SPF, DKIM, and DMARC all configured on vincentiwuno.me. The auth records took forever to get right — kept landing in spam until I properly understood how domain verification works.",
+    impact: "Real authenticated email that doesn't hit spam folders on Gmail, Outlook, ProtonMail.",
     stack: ["Postfix", "Brevo", "DNS", "Kali Linux", "DKIM", "SPF", "DMARC"],
     status: "live",
     screenshot: "/projects/smtp.svg",
@@ -154,8 +180,8 @@ export const projects = [
   {
     num: "02",
     title: "Phishing Awareness Lab",
-    desc: "Set up a controlled GoPhish deployment to simulate end-to-end phishing campaigns — from lure design and domain spoofing to landing page capture and credential harvesting analysis. Built to study how attacks work, not to run them.",
-    impact: "Revealed how small design decisions dramatically affect click-through and credential submission rates.",
+    desc: "A controlled GoPhish deployment for studying how phishing actually works end to end — lure design, spoofed domains, landing pages, credential capture analysis. Only ever run against myself. The point was to understand the attack, not to run one.",
+    impact: "Watching the numbers change when I tweaked a lure template or landing page — tiny design decisions move click-through rates more than you'd think.",
     stack: ["GoPhish", "SMTP", "HTML/CSS", "Python"],
     status: "lab",
     screenshot: "/projects/phishing.svg",
@@ -163,8 +189,8 @@ export const projects = [
   {
     num: "03",
     title: "Network Recon Automation Toolkit",
-    desc: "Python scripts that wrap Nmap with smart defaults, parse XML output into readable reports, and auto-email findings to a designated inbox via the custom SMTP server. Designed to cut down repetitive recon work during lab sessions.",
-    impact: "Reduced manual recon documentation time significantly — scan-to-report in one command.",
+    desc: "Python scripts that wrap Nmap with sensible defaults, parse the XML output into a readable report, and email it to my inbox over my own SMTP server. Built because I got tired of manually formatting scan output during recon.",
+    impact: "Scan to report in one command — stopped copy-pasting scan output into notes by hand.",
     stack: ["Python", "Nmap", "Bash", "SMTP", "XML parsing"],
     status: "active",
     screenshot: "/projects/recon.svg",
@@ -181,7 +207,7 @@ export const projects = [
   {
     num: "05",
     title: "Recon Dashboard",
-    desc: "A web UI for visualizing Nmap scan output — turns raw XML into a clean, searchable interface with port timeline views and host maps.",
+    desc: "A web UI for turning raw Nmap output into something you can actually search — port timeline views, host maps, and a clean list instead of a wall of XML. Early stage, still fleshing it out.",
     impact: "",
     stack: ["Python", "Flask", "Nmap", "SQLite"],
     status: "wip",
@@ -189,8 +215,8 @@ export const projects = [
   {
     num: "06",
     title: "SecureOps MCP",
-    desc: "A local security auditing server using the Model Context Protocol — runs regex + AST + filename scans on your codebase through an LLM-powered interface. 14 security rules, 39 regex patterns, SARIF output, and path traversal protection. Zero source code ever leaves the machine.",
-    impact: "LLM-orchestrated security audits without sending source code to any third-party API.",
+    desc: "A local security auditing server built on the Model Context Protocol — an LLM can trigger scans of your codebase without the source code ever leaving your machine. 14 rules, 39 regex patterns, AST checks, SARIF output, path-traversal protection.",
+    impact: "LLM-driven security audits with zero source code leaving the machine.",
     stack: ["Python", "MCP", "AST", "Regex", "SARIF", "Docker"],
     status: "active",
     screenshot: "/projects/secureops.svg",

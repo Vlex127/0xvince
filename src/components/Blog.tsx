@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { AnimatedSection } from "./AnimatedSection"
 import { blogPosts, getPublishedPosts, getUpcomingPosts, type BlogPost } from "@/lib/blog"
+import { Badge } from "./Badge"
 
 const CATEGORY_COLOR: Record<string, { color: string; bg: string }> = {
   "smtp · infrastructure": { color: "rgba(52,211,153,1)",  bg: "rgba(52,211,153,0.08)"  },
@@ -71,12 +72,9 @@ function BlogCard({
 
       {/* Featured badge */}
       {featured && (
-        <div
-          className="absolute top-5 right-5 font-[family-name:var(--font-mono)] text-[9px] px-2 py-[3px] rounded-[3px] tracking-[0.14em] uppercase font-medium"
-          style={{ color: cfg.color, background: cfg.bg }}
-        >
+        <Badge color={cfg.color} bg={cfg.bg} className="absolute top-5 right-5">
           featured
-        </div>
+        </Badge>
       )}
 
       <div className="relative z-10 p-7 flex flex-col h-full">

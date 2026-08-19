@@ -26,9 +26,7 @@ export function Hero() {
       <div className="relative z-10 max-w-[760px]">
         {/* Status badge */}
         <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 mb-8 rounded-full border border-[var(--border-default)] bg-[var(--bg-elevated)]/60">
-          <span className="relative flex h-2 w-2">
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400" />
-          </span>
+          <span className="h-2 w-2 rounded-full bg-emerald-400" />
           <span className="font-[family-name:var(--font-mono)] text-[10px] text-[var(--text-secondary)] tracking-[0.18em] lowercase">
             available for work · remote
           </span>
@@ -96,7 +94,7 @@ export function Hero() {
         {[
           { num: "06", suffix: "", label: "projects shipped" },
           { num: "5", suffix: "+", label: "ctf categories" },
-          { num: "100", suffix: "%", label: "email deliverability" },
+          { num: "#1", suffix: "", label: "nigeria on hackerdna" },
         ].map((stat) => (
           <div key={stat.label} className="text-right group cursor-default">
             <div className="text-[42px] font-black text-[var(--text-primary)] tracking-[-2px] leading-none group-hover:text-[var(--accent-light)] transition-colors duration-300">
