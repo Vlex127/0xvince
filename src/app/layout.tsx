@@ -14,7 +14,7 @@ const jetbrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
-const SITE_URL = "https://vincentiwuno.me";
+const SITE_URL = "https://www.vincentiwuno.me";
 const OG_IMAGE = `${SITE_URL}/og.png`;
 
 export const metadata: Metadata = {
@@ -116,49 +116,63 @@ export const viewport: Viewport = {
   colorScheme: "dark",
 };
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Person",
-  name: "Vincent Iwuno",
-  alternateName: "0xVince",
-  url: SITE_URL,
-  image: OG_IMAGE,
-  jobTitle: "Cybersecurity Researcher",
-  description:
-    "18-year-old cybersecurity researcher from Nigeria specialising in penetration testing, offensive security, and CTF challenges.",
-  address: {
-    "@type": "PostalAddress",
-    addressCountry: "NG",
-  },
-  email: "0xvince@vincentiwuno.me",
-  sameAs: [
-    "https://github.com/Vlex127",
-    "https://x.com/0xvince1",
-    "https://linkedin.com/in/vincentiwuno",
-    "https://instagram.com/vincent_iwuno",
-    "https://tryhackme.com/p/0xvince",
-  ],
-  knowsAbout: [
-    "Penetration Testing",
-    "Network Security",
-    "Web Application Security",
-    "CTF Challenges",
-    "OSINT",
-    "Python Scripting",
-    "Kali Linux",
-    "Offensive Security",
-    "Social Engineering",
-    "SMTP / Email Security",
-  ],
-  hasOccupation: {
-    "@type": "Occupation",
-    name: "Cybersecurity Researcher",
-    occupationLocation: {
-      "@type": "Country",
-      name: "Nigeria",
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Vincent Iwuno — 0xVince",
+    url: SITE_URL,
+    description:
+      "Cybersecurity researcher and penetration tester from Nigeria. Offensive security, CTF challenges, and security tooling.",
+    author: {
+      "@type": "Person",
+      name: "Vincent Iwuno",
     },
   },
-};
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: "Vincent Iwuno",
+    alternateName: "0xVince",
+    url: SITE_URL,
+    image: OG_IMAGE,
+    jobTitle: "Cybersecurity Researcher",
+    description:
+      "18-year-old cybersecurity researcher from Nigeria specialising in penetration testing, offensive security, and CTF challenges.",
+    address: {
+      "@type": "PostalAddress",
+      addressCountry: "NG",
+    },
+    email: "0xvince@vincentiwuno.me",
+    sameAs: [
+      "https://github.com/Vlex127",
+      "https://x.com/0xvince1",
+      "https://linkedin.com/in/vincentiwuno",
+      "https://instagram.com/vincent_iwuno",
+      "https://tryhackme.com/p/0xvince",
+    ],
+    knowsAbout: [
+      "Penetration Testing",
+      "Network Security",
+      "Web Application Security",
+      "CTF Challenges",
+      "OSINT",
+      "Python Scripting",
+      "Kali Linux",
+      "Offensive Security",
+      "Social Engineering",
+      "SMTP / Email Security",
+    ],
+    hasOccupation: {
+      "@type": "Occupation",
+      name: "Cybersecurity Researcher",
+      occupationLocation: {
+        "@type": "Country",
+        name: "Nigeria",
+      },
+    },
+  },
+];
 
 export default function RootLayout({
   children,
@@ -188,6 +202,20 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebPage",
+              name: "Vincent Iwuno (0xVince) — Cybersecurity Researcher",
+              description:
+                "18-year-old cybersecurity researcher from Nigeria specialising in penetration testing, offensive security, CTF challenges, and security tooling.",
+              url: SITE_URL,
+              author: { "@type": "Person", name: "Vincent Iwuno" },
+            }),
+          }}
         />
       </head>
       <body

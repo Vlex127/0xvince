@@ -2,7 +2,7 @@ import Link from "next/link"
 import { usesData } from "@/lib/uses"
 import type { Metadata } from "next"
 
-const SITE_URL = "https://vincentiwuno.me"
+const SITE_URL = "https://www.vincentiwuno.me"
 
 export const metadata: Metadata = {
   title: "/uses | 0xVince",

@@ -4,7 +4,7 @@ import { getPublishedPosts, getBlogPost } from "@/lib/blog"
 import { BlogPostContent } from "./content"
 import type { Metadata } from "next"
 
-const SITE_URL = "https://vincentiwuno.me"
+const SITE_URL = "https://www.vincentiwuno.me"
 
 export async function generateStaticParams() {
   return getPublishedPosts().map((post) => ({ slug: post.slug }))

@@ -1,0 +1,25 @@
+# Vincent Iwuno (0xVince)
+
+Cybersecurity researcher and penetration tester from Nigeria. Specializes in offensive security, CTF competitions, network infrastructure, and security tooling. Builds real-world infrastructure projects including SMTP mail servers with SPF/DKIM/DMARC, phishing awareness labs with GoPhish, and network reconnaissance automation. Active on TryHackMe, HackTheBox, and HackerDNA. Open to security roles, freelance pentesting, and CTF collaborations.
+
+## What I Do
+
+- Penetration testing and vulnerability research
+- Network security infrastructure (Postfix, DNS, firewall rules)
+- Security tooling (Python, Bash, Nmap automation)
+- CTF competitions (web exploitation, privilege escalation, forensics, crypto)
+- Reverse engineering (GDB, Ghidra, binary exploitation)
+
+## Key Projects
+
+- Custom SMTP Mail Server — Postfix + Brevo with full email authentication
+- Phishing Awareness Lab — GoPhish deployment for security training
+- Network Recon Automation — Nmap wrapper with automated reporting
+- SecureOps MCP — LLM-driven local security auditing server
+
+## Contact
+
+- Email: 0xvince@vincentiwuno.me
+- GitHub: https://github.com/Vlex127
+- LinkedIn: https://linkedin.com/in/vincentiwuno
+- X/Twitter: https://x.com/0xvince1

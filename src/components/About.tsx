@@ -8,7 +8,7 @@ function AvatarCard() {
       <div className="relative group">
         <div className="relative w-[300px] h-[380px] rounded-2xl overflow-hidden border border-[var(--border-default)] transition-colors duration-500 group-hover:border-[var(--border-strong)]">
           <Image
-            src="/profile.png"
+            src="/profile.webp"
             alt="Vincent Iwuno — 0xVince"
             fill
             sizes="(max-width: 768px) 300px, 300px"

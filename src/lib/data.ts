@@ -102,7 +102,7 @@ export const experience: ExperienceItem[] = [
       "Wrote a script that runs Nmap and emails me the report so I stop manually copy-pasting scan output",
     ],
     skills: ["Postfix", "GoPhish", "Python", "Nmap", "DNS", "Kali Linux", "SMTP", "DKIM/SPF/DMARC"],
-    link: "https://vincentiwuno.me",
+    link: "https://www.vincentiwuno.me",
   },
   {
     date: "2026",
@@ -175,7 +175,7 @@ export const projects: Project[] = [
     stack: ["Postfix", "Brevo", "DNS", "Kali Linux", "DKIM", "SPF", "DMARC"],
     status: "live",
     screenshot: "/projects/smtp.svg",
-    link: "https://vincentiwuno.me",
+    link: "https://www.vincentiwuno.me",
   },
   {
     num: "02",

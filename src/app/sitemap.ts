@@ -1,18 +1,18 @@
 import type { MetadataRoute } from "next"
 import { getPublishedPosts } from "@/lib/blog"
 
+const SITE_URL = "https://www.vincentiwuno.me"
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const blogEntries: MetadataRoute.Sitemap = getPublishedPosts().map((post) => ({
-    url: `https://vincentiwuno.me/blog/${post.slug}`,
+    url: `${SITE_URL}/blog/${post.slug}`,
     lastModified: new Date(post.publishedAt),
-    changeFrequency: "monthly" as const,
-    priority: 0.8,
   }))
 
   return [
-    { url: "https://vincentiwuno.me", lastModified: new Date(), changeFrequency: "monthly", priority: 1 },
-    { url: "https://vincentiwuno.me/blog", lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
-    { url: "https://vincentiwuno.me/uses", lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
+    { url: SITE_URL, lastModified: new Date() },
+    { url: `${SITE_URL}/blog`, lastModified: new Date() },
+    { url: `${SITE_URL}/uses`, lastModified: new Date() },
     ...blogEntries,
   ]
 }
