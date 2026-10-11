@@ -7,6 +7,7 @@ export const navLinks = [
   { label: "about", href: "#about" },
   { label: "skills", href: "#skills" },
   { label: "experience", href: "#experience" },
+  { label: "credentials", href: "#credentials" },
   { label: "projects", href: "#projects" },
   { label: "ctf", href: "#ctf" },
   { label: "blog", href: "/blog" },
@@ -171,7 +172,7 @@ export const projects: Project[] = [
     num: "01",
     title: "Custom SMTP Mail Server",
     desc: "A mail server that actually delivers. Postfix + Brevo on Kali, with SPF, DKIM, and DMARC all configured on vincentiwuno.me. The auth records took forever to get right — kept landing in spam until I properly understood how domain verification works.",
-    impact: "Real authenticated email that doesn't hit spam folders on Gmail, Outlook, ProtonMail.",
+    impact: "SPF, DKIM, and DMARC all pass — 0/20 test emails landed in spam, 100% inbox across Gmail, Outlook, and ProtonMail.",
     stack: ["Postfix", "Brevo", "DNS", "Kali Linux", "DKIM", "SPF", "DMARC"],
     status: "live",
     screenshot: "/projects/smtp.svg",
@@ -181,7 +182,7 @@ export const projects: Project[] = [
     num: "02",
     title: "Phishing Awareness Lab",
     desc: "A controlled GoPhish deployment for studying how phishing actually works end to end — lure design, spoofed domains, landing pages, credential capture analysis. Only ever run against myself. The point was to understand the attack, not to run one.",
-    impact: "Watching the numbers change when I tweaked a lure template or landing page — tiny design decisions move click-through rates more than you'd think.",
+    impact: "One controlled 45-target run: 73% opened, 62% clicked, 24 credential submissions (53%) — phishing is a human problem, not a technical one.",
     stack: ["GoPhish", "SMTP", "HTML/CSS", "Python"],
     status: "lab",
     screenshot: "/projects/phishing.svg",
@@ -190,7 +191,7 @@ export const projects: Project[] = [
     num: "03",
     title: "Network Recon Automation Toolkit",
     desc: "Python scripts that wrap Nmap with sensible defaults, parse the XML output into a readable report, and email it to my inbox over my own SMTP server. Built because I got tired of manually formatting scan output during recon.",
-    impact: "Scan to report in one command — stopped copy-pasting scan output into notes by hand.",
+    impact: "Scan-to-report in one command — Nmap XML parsed and emailed to me in seconds, no manual copy-paste.",
     stack: ["Python", "Nmap", "Bash", "SMTP", "XML parsing"],
     status: "active",
     screenshot: "/projects/recon.svg",
@@ -221,6 +222,30 @@ export const projects: Project[] = [
     status: "active",
     screenshot: "/projects/secureops.svg",
     link: "https://github.com/Vlex127/secureops-mcp",
+  },
+]
+
+// ─────────────────────────────────────────
+// CERTIFICATIONS
+// ─────────────────────────────────────────
+export type Certification = {
+  name: string
+  credential: string
+  issuer: string
+  earned: string
+  expires?: string
+  skills: string[]
+  verifyUrl: string
+}
+export const certifications: Certification[] = [
+  {
+    name: "Security Operations Analyst Associate",
+    credential: "SC-200 · ID 55BB268B0197DF6A",
+    issuer: "Microsoft",
+    earned: "Aug 2026",
+    expires: "Aug 2027",
+    skills: ["Microsoft Sentinel", "Microsoft 365 Defender", "KQL", "Threat Hunting", "Incident Response", "MITRE ATT&CK"],
+    verifyUrl: "https://learn.microsoft.com/en-us/users/vincentiwuno-6270/credentials/certification/security-operations-analyst",
   },
 ]
 

@@ -174,6 +174,17 @@ const jsonLd = [
         name: "Nigeria",
       },
     },
+    hasCredential: {
+      "@type": "EducationalOccupationalCredential",
+      credentialCategory: "certification",
+      name: "Microsoft Certified: Security Operations Analyst Associate (SC-200)",
+      recognizedBy: {
+        "@type": "Organization",
+        name: "Microsoft",
+      },
+      dateCreated: "2026-08-28",
+      url: "https://learn.microsoft.com/en-us/users/vincentiwuno-6270/credentials/certification/security-operations-analyst",
+    },
   },
 ];
 

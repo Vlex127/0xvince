@@ -2,6 +2,7 @@ import { Navigation } from "@/components/Navigation"
 import { Hero } from "@/components/Hero"
 import { About } from "@/components/About"
 import { Skills } from "@/components/Skills"
+import { Certifications } from "@/components/Certifications"
 import { Experience } from "@/components/Experience"
 import { Projects } from "@/components/Projects"
 import { CTF } from "@/components/CTF"
@@ -22,6 +23,8 @@ export default function Home() {
         <About />
         <Divider />
         <Skills />
+        <Divider />
+        <Certifications />
         <Divider />
         <Experience />
         <Divider />
