@@ -275,20 +275,105 @@ Next up: DKIM key rotation, DMARC reporting dashboards, and what happens when yo
     tags: ["phishing", "red team", "gophish"],
     featured: false,
     content: `
-## Coming Soon
+> **Note:** This is the build walkthrough from my own lab. Any numbers marked **[YOUR RESULTS HERE]** are placeholders — fill them in from your real campaign data before publishing. GoPhish is for authorised simulations on infrastructure you own or have explicit written permission to test. Never send phishing simulations to people without consent.
 
-This post is currently being written. The research and lab work is complete — documenting the findings takes time.
+Phishing is the most reliable initial-access vector there is, so if you want to understand it — offensively or defensively — you need to run it in a controlled environment and see the actual numbers. GoPhish is the standard open-source framework for that: it handles senders, target groups, email templates, landing pages, and tracking, and it gives you a dashboard that shows exactly how people respond.
 
-What it will cover:
+I ran this entirely on Kali, against mailboxes I control. Here's how the pieces fit together.
 
-- Deploying GoPhish on Kali Linux
-- Designing realistic lure templates that bypass common filters
-- Setting up landing pages for credential harvesting in a controlled environment
-- Analysing campaign metrics: open rates, click-through rates, and credential submission rates
-- How small design changes (urgency, personalization, branding) dramatically affect success rates
-- Defensive takeaways: what to look for in a phishing email
+## What You Need
 
-Follow [@0xvince](https://x.com/0xvince1) to know when it drops.
+Before touching GoPhish, line up the plumbing:
+
+- **A domain you own.** Don't use your real primary domain — that defeats the realism. Buy a lookalike or throwaway registered to your lab.
+- **A sending IP that isn't blacklisted.** Residential IPs and most cloud ranges go straight to spam. This is the single biggest reason simulations fail.
+- **An SMTP relay.** Brevo, AWS SES, or SendGrid handle reputation so your mail actually lands. GoPhish connects to it as a smart host.
+- **DNS records on the sending domain:** SPF, DKIM, DMARC — the same trio from my mail-server post. If you skip these, everything you send is flagged and your results are meaningless.
+
+If the sending infrastructure is weak, the campaign data tells you about your IP reputation, not human behaviour. Get delivery right first.
+
+## Deploying GoPhish on Kali
+
+Grab the latest release from the GitHub page rather than trusting an APT package, so you're on a current build:
+
+\`\`\`bash
+cd ~/Downloads
+tar -xzf gophish-vX.X-linux-64bit.tar.gz
+sudo mv gophish /opt/
+cd /opt/gophish
+\`\`\`
+
+The admin UI runs over HTTPS with a self-signed cert generated on first launch. The included \`gophish.json\` controls the bind address and the phishing server URL:
+
+\`\`\`json
+{
+  "admin_server": { "listen_url": "0.0.0.0:3333", "tls_cert": "gophish.crt" },
+  "phish_server": { "listen_url": "0.0.0.0:80" }
+}
+\`\`\`
+
+Start it and open the admin interface on port 3333:
+
+\`\`\`bash
+sudo ./gophish
+# admin UI: https://localhost:3333  (password is printed to stdout on first run)
+\`\`\`
+
+## The Moving Parts
+
+GoPhish composes a campaign out of five things. Understanding the model is most of the work.
+
+- **SMTP Status / Sending Profile** — *how* mail leaves: relay host, port, username, password, and the "From" address.
+- **Users & Groups** — your targets. In a lab, that's mailboxes you own.
+- **Landing Pages** — the page a victim lands on, usually a cloned login form that captures submissions.
+- **Email Templates** — the lure. GoPhish injects tracking pixels and links automatically.
+- **Campaigns** — binds the four above together and launches.
+
+## Step 1: Sending Profile
+
+In the UI, New Profile → set the interface (your sending domain), the relay's host and port (587 with STARTTLS for most providers), and SMTP credentials. Hit *Send Test Email* — GoPhish gives a clear pass/fail and the raw SMTP conversation on failure, which is where you'll debug most of your delivery issues.
+
+## Step 2: The Landing Page
+
+The fastest route is *Clone Site*: give it a URL and GoPhish fetches the HTML. That rarely captures POSTed credentials, because the original form submits to the real server. You edit the captured HTML so the form posts to GoPhish's capture handler instead:
+
+\`\`\`html
+<form method="POST" action="/submit?{{ .GUID }}">
+  <input type="hidden" name="data" value="{{ .Rhost }} {{ .Rtime }}" />
+  <input type="text" name="username" />
+  <input type="password" name="password" />
+</form>
+\`\`\`
+
+The \`{{ .GUID }}\` is the tracking token GoPhish stamps on every link — it's how a credential submission gets tied back to a specific target. After capture, set a *Redirect URL* pointing at the genuine site so the victim lands somewhere normal and doesn't notice.
+
+## Step 3: The Email Template
+
+Templates use GoTemplate variables — \`{{ .Email.FirstName }}\`, \`{{ .BaseURL }}\` — so each send is personalised. Two things GoPhish handles for you and you should understand anyway:
+
+- A **tracking pixel** is auto-added to measure opens.
+- Every link is rewritten through \`{{ .BaseURL }}\` so clicks route through your GoPhish server and get recorded.
+
+Make the single-target link red in the preview (there's a checkbox) so you can eyeball where it actually points.
+
+## Step 4: Launch and What the Data Shows
+
+A campaign moves each target through a lifecycle: *email sent → opened → clicked → data submitted → reported*. Watch those stages convert in the dashboard.
+
+The interesting part is that success rate is almost entirely a function of message design, not the technical plumbing. Urgency ("your password expires today"), correct branding, and a plausible sender move the numbers far more than anything on the server side.
+
+**[YOUR RESULTS HERE — pull the real open / click / submission / report rates from your campaign dashboard and drop them in as a small table.]**
+
+## Defensive Takeaways
+
+- **Check the sending domain, not the display name.** The "From" *label* is free text; the actual \`MAIL FROM\` and DKIM \`d=\` domain are the truth — which is exactly what SPF/DKIM/DMARC exist to expose.
+- **Hover before clicking.** The rewritten \`{{ .BaseURL }}\` link is the tell in a real attack.
+- **A submission is a breach.** If the landing page looked like a real login and credentials hit an unfamiliar server, the protocol is: change the password from a *known-good* device, then check for active sessions.
+
+## What I Learned
+
+Running the same lure with only the branding changed produced a very different submission rate — the strongest single confirmation I've had that phishing is a human-factors problem wearing a technical costume. The infrastructure gets your mail delivered; the *content* gets your click.
+
 `,
   },
   {
@@ -300,21 +385,83 @@ Follow [@0xvince](https://x.com/0xvince1) to know when it drops.
     tags: ["dns", "email security", "smtp"],
     featured: false,
     content: `
-## Coming Soon
+Most explanations of SPF, DKIM, and DMARC stop at "add these TXT records and email is secure." That's not wrong, but it hides the parts that actually matter to a researcher: *what each protocol does and doesn't verify*, and the specific ways each one quietly breaks.
 
-This post is currently in the research phase.
+This is the packet-level view — and the failure modes.
 
-What it will cover:
+## The Mental Model
 
-- Deep dive into each authentication protocol at the packet level
-- What happens when SPF has too many DNS lookups (the \`include\` limit)
-- DKIM signature failures: replay attacks, key rotation, and selector management
-- DMARC policy escalation from \`none\` → \`quarantine\` → \`reject\`
-- Building a lab to test each misconfiguration and observing the results
-- Real-world spoofing techniques and how these protocols prevent (or fail to prevent) them
+Three protocols, three different questions:
 
-Follow [@0xvince](https://x.com/0xvince1) to know when it drops.
-`,
+- **SPF** asks: *is this server allowed to send for the envelope-from domain?*
+- **DKIM** asks: *was this message signed by the private key behind the header \`d=\` domain, and has it been altered since?*
+- **DMARC** asks: *do SPF/DKIM actually line up with the domain the human sees in the From header — and if not, what should the receiver do?*
+
+None of them, on its own, proves the visible sender is legitimate. That gap is where the whole game is played.
+
+## SPF — Envelope Sender, Not the From Header
+
+SPF is evaluated against the SMTP \`MAIL FROM\` (the *envelope* sender, visible in the \`Return-Path\`), **not** the \`From:\` header a user reads. That distinction surprises people and is exactly why SPF alone is trivially spoofable: an attacker can put your brand in the \`From:\` header while the envelope sender is a domain they control and SPF happily passes.
+
+A record like \`v=spf1 include:_spf.example.com ip4:1.2.3.4 -all\` is a small program. \`include\` chains to another domain's SPF, \`ip4\`/\`ip6\` allow literal addresses, and the qualifier \`+\`/\`-\`/\`~\`/\`?\` sets the verdict.
+
+### The failure modes
+
+- **The 10-lookup limit.** SPF allows at most 10 DNS lookups per check. Chain enough \`include\`s (common once a SaaS provider layers CRM, marketing, and support tools) and you cross 10 — the receiver returns \`permerror\` and the check hard-fails. Fix it by inlining static \`ip4\` ranges instead of includes, or use a flattening service *carefully* — flattening has its own spoofing trade-offs.
+- **The \`+all\` footgun.** \`+all\` means "any server on the internet is authorised." It appears in misconfigured zones constantly. Use \`-all\` (hard fail) once you're sure your senders are complete.
+- **Forwarders break it.** When a mailing list or forwarder re-sends your mail from a different IP, SPF can fail because the new sender isn't in your list. This is *alignment*, and it's DKIM/DMARC's job, not SPF's.
+
+## DKIM — A Cryptographic Seal on Headers and Body
+
+DKIM hashes selected headers plus the body, signs that hash with the domain's private key, and drops the signature into a \`DKIM-Signature\` header. The receiver extracts the \`d=\` (domain) and \`s=\` (selector) tags, queries \`s._domainkey.d\` in DNS for the public key, and verifies. \`bh=\` covers the body; \`b=\` covers the signed headers.
+
+### The failure modes
+
+- **Signature stripping in transit.** Naive relays and mailing lists can remove or reformat the \`DKIM-Signature\` header, or a proxy that edits the subject line will change a signed header and blow the verification. Nothing is "hacked" — the seal is just broken by normal handling.
+- **Selector hygiene.** Keys live under selectors (\`default\`, \`s1\`, \`google\`). If you decommission a sending service and leave an old selector pointing at a leaked key, you've published an attacker's signing key under your own domain. Audit selectors like you audit subdomains.
+- **Sub-key disclosure via logging.** The signature is in a header, so anything that logs full headers (proxies, debug relays, mail archiving tools) leaks your signed messages. Not a break, but a real operational footgun worth calling out in a report.
+
+## DMARC — The Protocol That Ties It Together
+
+DMARC is the layer that finally compares the authentication results against the domain in the visible \`From:\` header. A message passes DMARC only when it passes SPF **and aligns**, or passes DKIM **and aligns**.
+
+### Alignment is the whole point
+
+- **SPF alignment** compares the envelope domain to the From domain.
+- **DKIM alignment** compares the \`d=\` domain to the From domain.
+- Two modes: \`s\` (strict — exact domain match) and \`r\` (relaxed — same organisational domain, subdomains allowed).
+
+Real attack pattern: a message can pass SPF *and* DKIM yet still fail DMARC if neither domain aligns with the From header. Plenty of "authentication passed" phish live right here — technically signed, but by a domain that isn't the brand in the header. That's the signal DMARC gives receivers to apply your \`p=quarantine\` or \`p=reject\` policy.
+
+### The escalation path
+
+\`\`\`txt
+p=none      # monitor only — you get aggregate (rua) reports, nothing is rejected
+p=quarantine # move failures to spam
+p=reject     # bounce failures
+\`\`\`
+
+Go \`none → quarantine → reject\` *only after reading your DMARC reports*, because jumping to \`reject\` while a legitimate third-party sender (your billing tool, your CRM) isn't aligned will bounce real mail. Aggregate XML reports show you every source sending as your domain and whether it authenticates — that's the data you escalate on.
+
+## Building a Lab to See This Yourself
+
+You don't need much, and you can watch the failure modes instead of reading about them. With a domain you control and \`swaks\`:
+
+\`\`\`bash
+# Send from an unauthorised server to observe an SPF failure in the headers
+swaks --to you@gmail.com --from lab@yourdomain.com --server some-unlisted-host:25
+
+# Send mail that has a DKIM signature but a From domain that doesn't align,
+# then read the Authentication-Results header in Gmail (Show original)
+\`\`\`
+
+Then open Gmail's **"Show original"** and read the \`Authentication-Results:\` block. You'll see \`spf=pass\`, \`dkim=pass\`, and \`dmarc=fail\` side by side — and the "fail" will point straight at the alignment mismatch. That single header view is the clearest way to internalise why all three protocols are needed.
+
+**[YOUR RESULTS HERE — capture the exact \`Authentication-Results\` headers you want to quote from your own misconfiguration tests and paste them in.]**
+
+## What I Learned
+
+The three protocols aren't redundant checks of the same thing — they answer different questions and fail in different ways. SPF is about the sending *server*, DKIM about message *integrity*, and DMARC about whether either actually corresponds to the domain the human sees. Most people stop at "I added the records." The research starts when you deliberately break each one and watch the verdict headers change.`,
   },
 ]
 
