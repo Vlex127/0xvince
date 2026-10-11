@@ -5,7 +5,7 @@ import type { Metadata } from "next"
 const SITE_URL = "https://www.vincentiwuno.me"
 
 export const metadata: Metadata = {
-  title: "Blog | 0xVince",
+  title: "Blog",
   description: "Security research writeups, infrastructure deep dives, and CTF walkthroughs by Vincent Iwuno (0xVince).",
   openGraph: {
     title: "Blog | 0xVince",

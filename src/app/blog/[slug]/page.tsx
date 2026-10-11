@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (!post) return {}
 
   return {
-    title: `${post.title} | 0xVince`,
+    title: post.title,
     description: post.desc,
     openGraph: {
       title: post.title,
@@ -85,6 +85,37 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         {/* Content */}
         <BlogPostContent content={post.content} />
       </article>
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BlogPosting",
+            mainEntityOfPage: {
+              "@type": "WebPage",
+              "@id": `${SITE_URL}/blog/${post.slug}`,
+            },
+            headline: post.title,
+            description: post.desc,
+            image: `${SITE_URL}/og.png`,
+            datePublished: post.publishedAt,
+            dateModified: post.publishedAt,
+            inLanguage: "en",
+            keywords: post.tags,
+            author: {
+              "@type": "Person",
+              name: "Vincent Iwuno",
+              url: SITE_URL,
+            },
+            publisher: {
+              "@type": "Person",
+              name: "Vincent Iwuno",
+              url: SITE_URL,
+            },
+          }),
+        }}
+      />
     </main>
   )
 }
