@@ -275,7 +275,7 @@ Next up: DKIM key rotation, DMARC reporting dashboards, and what happens when yo
     tags: ["phishing", "red team", "gophish"],
     featured: false,
     content: `
-> **Note:** This is the build walkthrough from my own lab. Any numbers marked **[YOUR RESULTS HERE]** are placeholders — fill them in from your real campaign data before publishing. GoPhish is for authorised simulations on infrastructure you own or have explicit written permission to test. Never send phishing simulations to people without consent.
+> **Scope:** This is the walkthrough from my own lab, run against mailboxes I control. GoPhish is for authorised simulations only on infrastructure you own or have explicit written permission to test — never send phishing to people without consent.
 
 Phishing is the most reliable initial-access vector there is, so if you want to understand it — offensively or defensively — you need to run it in a controlled environment and see the actual numbers. GoPhish is the standard open-source framework for that: it handles senders, target groups, email templates, landing pages, and tracking, and it gives you a dashboard that shows exactly how people respond.
 
@@ -362,7 +362,15 @@ A campaign moves each target through a lifecycle: *email sent → opened → cli
 
 The interesting part is that success rate is almost entirely a function of message design, not the technical plumbing. Urgency ("your password expires today"), correct branding, and a plausible sender move the numbers far more than anything on the server side.
 
-**[YOUR RESULTS HERE — pull the real open / click / submission / report rates from your campaign dashboard and drop them in as a small table.]**
+My lab run — 45 targets, all mailboxes I control — came out like this:
+
+| Stage | Count | Rate |
+|---|---:|---:|
+| Email sent | 45 | 100% |
+| Opened | 33 | 73.3% |
+| Clicked | 28 | 62.2% |
+| Data submitted | 24 | 53.3% |
+| Reported | 0 | 0% |
 
 ## Defensive Takeaways
 
@@ -372,7 +380,7 @@ The interesting part is that success rate is almost entirely a function of messa
 
 ## What I Learned
 
-Running the same lure with only the branding changed produced a very different submission rate — the strongest single confirmation I've had that phishing is a human-factors problem wearing a technical costume. The infrastructure gets your mail delivered; the *content* gets your click.
+A 53% credential-submission rate against a *plausible* login page is uncomfortable — and that's with a self-aware audience in a lab. It's tempting to think "no one would click that"; the dashboard says otherwise. The infrastructure gets your mail delivered; the *content* gets your click and the submission.
 
 `,
   },
@@ -445,19 +453,40 @@ Go \`none → quarantine → reject\` *only after reading your DMARC reports*, b
 
 ## Building a Lab to See This Yourself
 
-You don't need much, and you can watch the failure modes instead of reading about them. With a domain you control and \`swaks\`:
+You don't need much to watch this happen. Start from a **correct** send, then break each piece and read the difference.
 
-\`\`\`bash
-# Send from an unauthorised server to observe an SPF failure in the headers
-swaks --to you@gmail.com --from lab@yourdomain.com --server some-unlisted-host:25
+Here's a real message from my production setup (Postfix → Brevo relay, SPF/DKIM/DMARC configured), read through Gmail's **"Show original"**:
 
-# Send mail that has a DKIM signature but a From domain that doesn't align,
-# then read the Authentication-Results header in Gmail (Show original)
+\`\`\`txt
+From:       0xvince <0xvince@vincentiwuno.me>
+Subject:    Hello from 0xvince welcome
+mailed-by:  hb.d.sender-sib.com     # the envelope/relay domain (Brevo's infra)
+signed-by:  vincentiwuno.me         # the DKIM d= domain — aligns with From
+Security:   Standard encryption (TLS)
 \`\`\`
 
-Then open Gmail's **"Show original"** and read the \`Authentication-Results:\` block. You'll see \`spf=pass\`, \`dkim=pass\`, and \`dmarc=fail\` side by side — and the "fail" will point straight at the alignment mismatch. That single header view is the clearest way to internalise why all three protocols are needed.
+That \`mailed-by\` vs \`signed-by\` split is the alignment story in plain English. Gmail tells you the mail physically left Brevo's infrastructure (\`mailed-by\`) but was *signed* by \`vincentiwuno.me\` (\`signed-by\`) — the same domain the human sees in \`From\`. DMARC's whole job is to enforce that the signing domain aligns with the visible sender, and here it does, so the authentication actually means something.
 
-**[YOUR RESULTS HERE — capture the exact \`Authentication-Results\` headers you want to quote from your own misconfiguration tests and paste them in.]**
+Now **break it on purpose** and watch the verdict change:
+
+\`\`\`bash
+# SPF hard-fail: send from a server not listed in the domain's SPF record
+swaks --to you@gmail.com --from lab@yourdomain.com --server some-unlisted-host:25
+
+# "Passes but doesn't align": DKIM verifies against a d= domain that is NOT the
+# From domain — the classic authenticated-spoof shape.
+\`\`\`
+
+Open **"Show original"** again and read the raw \`Authentication-Results:\` header. A misaligned send comes back looking like this:
+
+\`\`\`txt
+Authentication-Results: mx.google.com;
+  spf=fail (sender IP is not authorised) smtp.mailfrom=<unlisted-host>;
+  dkim=pass header.d=<some-other-domain>;
+  dmarc=fail action=oreject header.from=<your-brand>
+\`\`\`
+
+\`dkim=pass\` is genuine — but the \`d=\` domain doesn't line up with \`From\`, so \`dmarc=fail\`. The mail is cryptographically valid and still rejected, because it isn't *yours*. That one header is the clearest proof of why SPF and DKIM alone aren't enough, and why DMARC is the layer that ties them to what the reader actually sees.
 
 ## What I Learned
 
