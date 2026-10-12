@@ -91,6 +91,21 @@ export type ExperienceItem = {
 }
 export const experience: ExperienceItem[] = [
   {
+    date: "2025 — present",
+    title: "Full Stack Software Engineer",
+    org: "Olympus Tech",
+    type: "work",
+    status: "current",
+    desc: "The day job. I own the platform end to end — frontend, API, database, deployment — shipping features from design through release. It's also where I got comfortable putting security thinking into code people actually use.",
+    highlights: [
+      "Built and maintain the interfaces and backend services with Next.js, React, and TypeScript",
+      "Cut report turnaround from hours to minutes by automating the delivery pipeline",
+      "Shipped 20+ features — REST APIs, auth flows, and containerized deployments",
+      "Trimmed onboarding friction with a reusable component library",
+    ],
+    skills: ["Next.js", "React", "TypeScript", "REST APIs", "Auth", "Docker", "CI/CD"],
+  },
+  {
     date: "2026 — present",
     title: "Independent Security Researcher",
     org: "Self-employed",
